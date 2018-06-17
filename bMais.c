@@ -10,6 +10,7 @@ TAB *Cria(int t){
   novo->filho = (TAB**)malloc(sizeof(TAB*)*t*2);
   int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
+  novo->prox = NULL;
   return novo;
 }
 
@@ -46,8 +47,10 @@ TAB *Busca(TAB* x, int ch){
   if(!x) return resp;
   int i = 0;
   while(i < x->nchaves && ch > x->chave[i]) i++;
-  if(i < x->nchaves && ch == x->chave[i]) return x;
-  if(x->folha) return resp;
+  if(i < x->nchaves && ch == x->chave[i]){
+    if(x->folha) return x;
+  }
+
   return Busca(x->filho[i], ch);
 }
 
@@ -55,6 +58,7 @@ TAB *Busca(TAB* x, int ch){
 TAB *Inicializa(){
   return NULL;
 }
+
 
 
 TAB *Divisao(TAB *x, int i, TAB* y, int t){
@@ -89,7 +93,7 @@ TAB *Insere_Nao_Completo(TAB *x, int k, int t){
     x->chave[i+1] = k;
     x->nchaves++;
     return x;
-  }
+  }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
   while((i>=0) && (k<x->chave[i])) i--;
   i++;
   if(x->filho[i]->nchaves == ((2*t)-1)){

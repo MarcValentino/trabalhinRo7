@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stlib.h>
-
+.
 const int t = 2;
 
 typedef struct ArvB{
   int nchaves, folha, *chave;
-  struct ArvB **filho;
+  struct ArvB **filho, *prox;
 }TAB;
 
 TAB *Cria(int t);
