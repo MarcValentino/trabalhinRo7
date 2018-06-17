@@ -66,7 +66,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
   z->nchaves= t - 1;
   z->folha = y->folha;
   int j;
-  for(j=0;j<t-1;j++) z->chave[j] = y->chave[j+t];
+  for(j=0;j<t;j++) z->chave[j] = y->chave[j-1+t];
   if(!y->folha){
     for(j=0;j<t;j++){
       z->filho[j] = y->filho[j+t];
