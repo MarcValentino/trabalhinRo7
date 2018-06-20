@@ -50,7 +50,6 @@ TAB *Busca(TAB* x, int ch){
   if(i < x->nchaves && ch == x->chave[i]){
     if(x->folha) return x;
   }
-
   return Busca(x->filho[i], ch);
 }
 

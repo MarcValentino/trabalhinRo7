@@ -1,6 +1,7 @@
 #include "bMais.h"
 
 int main(int argc, char *argv[]){
+  int t = 2;
   TAB * arvore = Inicializa();
   int num = 0, from, to;
   while(num != -1){

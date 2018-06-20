@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include <stlib.h>
-.
-const int t = 2;
+#include <stdlib.h>
+
+//const int t = 2;
 
 typedef struct ArvB{
   int nchaves, folha, *chave;
