@@ -62,22 +62,48 @@ TAB *Inicializa(){
 
 TAB *Divisao(TAB *x, int i, TAB* y, int t){
   TAB *z=Cria(t);
-  z->nchaves= t - 1;
+  if(y->folha){
+    z->nchaves= t;
+    z->folha = y->folha;
+    int j;
+    for(j=0;j<t;j++) z->chave[j] = y->chave[j+t-1];
+    if(!y->folha){
+      for(j=0;j<t;j++){
+        z->filho[j] = y->filho[j+t];
+        y->filho[j+t] = NULL;
+      }
+    }
+    y->nchaves = t - 1;
+    for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j];
+    x->filho[i] = z;
+    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1];
+    x->chave[i-1] = y->chave[t-1];
+    x->nchaves++;
+    // printf("####################\n");
+    // Imprime(x, 0);
+    // printf("####################\n");
+    if((y->folha)&&(z->folha)) y->prox = z;
+    return x;
+  }
+  z->nchaves= t-1;
   z->folha = y->folha;
   int j;
-  for(j=0;j<t;j++) z->chave[j] = y->chave[j-1+t];
+  for(j=0;j<t-1;j++) z->chave[j] = y->chave[j+t];
   if(!y->folha){
     for(j=0;j<t;j++){
       z->filho[j] = y->filho[j+t];
       y->filho[j+t] = NULL;
     }
   }
-  y->nchaves = t-1;
+  y->nchaves = t - 1;
   for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j];
   x->filho[i] = z;
   for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1];
   x->chave[i-1] = y->chave[t-1];
   x->nchaves++;
+  // printf("####################\n");
+  // Imprime(x, 0);
+  // printf("####################\n");
   return x;
 }
 
