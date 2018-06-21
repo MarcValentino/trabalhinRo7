@@ -18,3 +18,4 @@ TAB *Insere_Nao_Completo(TAB *x, int k, int t);
 TAB *Insere(TAB *T, int k, int t);
 TAB* remover(TAB* arv, int ch, int t);
 TAB* retira(TAB* arv, int k, int t);
+void testeFolhas(TAB *t);

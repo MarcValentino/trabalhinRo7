@@ -15,6 +15,7 @@ int main(int argc, char *argv[]){
     else if(num == -1){
       printf("\n");
       Imprime(arvore,0);
+      testeFolhas(arvore);
       Libera(arvore);
       return 0;
     }
@@ -25,4 +26,5 @@ int main(int argc, char *argv[]){
     else arvore = Insere(arvore, num, t);
     printf("\n\n");
   }
+
 }

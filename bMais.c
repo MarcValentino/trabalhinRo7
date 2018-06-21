@@ -107,6 +107,16 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
   return x;
 }
 
+void testeFolhas(TAB *t){
+  printf("rodou o teste\n");
+  TAB *p = t;
+  while(!p->folha) p = p->filho[0];
+  while(p!=NULL){
+    int i;
+    for(i=0;i<p->nchaves;i++) printf("%d\n", p->chave[i]);
+    p = p->prox;
+  }
+}
 
 TAB *Insere_Nao_Completo(TAB *x, int k, int t){
   int i = x->nchaves-1;
