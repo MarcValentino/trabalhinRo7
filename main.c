@@ -5,7 +5,7 @@ int main(int argc, char *argv[]){
   TAB * arvore = Inicializa();
   int num = 0, from, to;
   while(num != -1){
-    printf("Digite um numero para adicionar. 0 para imprimir. -9 para remover e -1 para sair\n");
+    printf("Digite um numero para adicionar. 0 para imprimir. -9 para remover, -2 para testeFolhas e -1 para sair\n");
     scanf("%i", &num);
     if(num == -9){
       scanf("%d", &from);
@@ -15,9 +15,11 @@ int main(int argc, char *argv[]){
     else if(num == -1){
       printf("\n");
       Imprime(arvore,0);
-      testeFolhas(arvore);
       Libera(arvore);
       return 0;
+    }else if(num == -2){
+      testeFolhas(arvore);
+      printf("\n");
     }
     else if(!num){
       printf("\n");

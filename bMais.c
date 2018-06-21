@@ -63,6 +63,8 @@ TAB *Inicializa(){
 TAB *Divisao(TAB *x, int i, TAB* y, int t){
   TAB *z=Cria(t);
   if(y->folha){
+    TAB *proxOrig = y->prox;
+
     z->nchaves= t;
     z->folha = y->folha;
     int j;
@@ -83,6 +85,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
     // Imprime(x, 0);
     // printf("####################\n");
     if((y->folha)&&(z->folha)) y->prox = z;
+    if(proxOrig) z->prox = proxOrig;
     return x;
   }
   z->nchaves= t-1;
