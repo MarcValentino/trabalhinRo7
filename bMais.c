@@ -64,7 +64,6 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
   TAB *z=Cria(t);
   if(y->folha){
     TAB *proxOrig = y->prox;
-
     z->nchaves= t;
     z->folha = y->folha;
     int j;
