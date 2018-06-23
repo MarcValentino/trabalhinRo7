@@ -49,6 +49,7 @@ TAB *Busca(TAB* x, int ch){
   while(i < x->nchaves && ch > x->chave[i]) i++;
   if(i < x->nchaves && ch == x->chave[i]){
     if(x->folha) return x;
+    return Busca(x->filho[i+1], ch);
   }
   return Busca(x->filho[i], ch);
 }
@@ -65,7 +66,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
   if(y->folha){
     TAB *proxOrig = y->prox;
     z->nchaves= t;
-    z->folha = y->folha;
+    z->folha = 1;
     int j;
     for(j=0;j<t;j++) z->chave[j] = y->chave[j+t-1];
     if(!y->folha){
@@ -88,7 +89,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
     return x;
   }
   z->nchaves= t-1;
-  z->folha = y->folha;
+  z->folha = 0;
   int j;
   for(j=0;j<t-1;j++) z->chave[j] = y->chave[j+t];
   if(!y->folha){
@@ -110,10 +111,10 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
 }
 
 void testeFolhas(TAB *t){
-  printf("rodou o teste\n");
   TAB *p = t;
   while(!p->folha) p = p->filho[0];
   while(p!=NULL){
+    if(p->folha) printf("eh folha\n");
     int i;
     for(i=0;i<p->nchaves;i++) printf("%d\n", p->chave[i]);
     p = p->prox;
@@ -165,7 +166,10 @@ TAB *Insere(TAB *T, int k, int t){
 
 
 TAB* remover(TAB* arv, int ch, int t){
-  if(!arv) return arv;
+  if(!arv){
+    printf("n tem nada\n");
+    return arv;
+  }
   int i;
   printf("Removendo %d...\n", ch);
   for(i = 0; i<arv->nchaves && arv->chave[i] < ch; i++);
@@ -177,45 +181,45 @@ TAB* remover(TAB* arv, int ch, int t){
       arv->nchaves--;
       return arv;
     }
-    if(!arv->folha && arv->filho[i]->nchaves >= t){ //CASO 2A
-      printf("\nCASO 2A\n");
-      TAB *y = arv->filho[i];  //Encontrar o predecessor k' de k na árvore com raiz em y
-      while(!y->folha) y = y->filho[y->nchaves];
-      int temp = y->chave[y->nchaves-1];
-      arv->filho[i] = remover(arv->filho[i], temp, t);
-      //Eliminar recursivamente K e substitua K por K' em x
-      arv->chave[i] = temp;
-      return arv;
-    }
-    if(!arv->folha && arv->filho[i+1]->nchaves >= t){ //CASO 2B
-      printf("\nCASO 2B\n");
-      TAB *y = arv->filho[i+1];  //Encontrar o sucessor k' de k na árvore com raiz em y
-      while(!y->folha) y = y->filho[0];
-      int temp = y->chave[0];
-      y = remover(arv->filho[i+1], temp, t); //Eliminar recursivamente K e substitua K por K' em x
-      arv->chave[i] = temp;
-      return arv;
-    }
-    if(!arv->folha && arv->filho[i+1]->nchaves == t-1 && arv->filho[i]->nchaves == t-1){ //CASO 2C
-      printf("\nCASO 2C\n");
-      TAB *y = arv->filho[i];
-      TAB *z = arv->filho[i+1];
-      y->chave[y->nchaves] = ch;          //colocar ch ao final de filho[i]
-      int j;
-      for(j=0; j<t-1; j++)                //juntar chave[i+1] com chave[i]
-        y->chave[t+j] = z->chave[j];
-      for(j=0; j<=t; j++)                 //juntar filho[i+1] com filho[i]
-        y->filho[t+j] = z->filho[j];
-      y->nchaves = 2*t-1;
-      for(j=i; j < arv->nchaves-1; j++)   //remover ch de arv
-        arv->chave[j] = arv->chave[j+1];
-      for(j=i+1; j <= arv->nchaves; j++)  //remover ponteiro para filho[i+1]
-        arv->filho[j] = arv->filho[j+1];
-      arv->filho[j] = NULL; //Campello
-      arv->nchaves--;
-      arv->filho[i] = remover(arv->filho[i], ch, t);
-      return arv;
-    }
+    //if(!arv->folha && arv->filho[i]->nchaves >= t){ //CASO 2A
+    //  printf("\nCASO 2A\n");
+    //  TAB *y = arv->filho[i];  //Encontrar o predecessor k' de k na árvore com raiz em y
+    //  while(!y->folha) y = y->filho[y->nchaves];
+    //  int temp = y->chave[y->nchaves-1];
+    //  arv->filho[i] = remover(arv->filho[i], temp, t);
+    //  //Eliminar recursivamente K e substitua K por K' em x
+  //  //  arv->chave[i] = temp;
+    //  return arv;
+    //}
+    //if(!arv->folha && arv->filho[i+1]->nchaves >= t){ //CASO 2B
+    //  printf("\nCASO 2B\n");
+    //  TAB *y = arv->filho[i+1];  //Encontrar o sucessor k' de k na árvore com raiz em y
+  //    while(!y->folha) y = y->filho[0];
+    //  int temp = y->chave[0];
+    //  y = remover(arv->filho[i+1], temp, t); //Eliminar recursivamente K e substitua K por K' em x
+    //  arv->chave[i] = temp;
+    //  return arv;
+    //}//
+    //if(!arv->folha && arv->filho[i+1]->nchaves == t-1 && arv->filho[i]->nchaves == t-1){ //CASO 2C
+    //  printf("\nCASO 2C\n");
+    //  TAB *y = arv->filho[i];
+    //  TAB *z = arv->filho[i+1];
+    //  y->chave[y->nchaves] = ch;          //colocar ch ao final de filho[i]
+    //  int j;
+  //  //  for(j=0; j<t-1; j++)                //juntar chave[i+1] com chave[i]
+    //    y->chave[t+j] = z->chave[j];
+    //  for(j=0; j<=t; j++)                 //juntar filho[i+1] com filho[i]
+    //    y->filho[t+j] = z->filho[j];
+    //  y->nchaves = 2*t-1;
+    //  for(j=i; j < arv->nchaves-1; j++)   //remover ch de arv
+    //    arv->chave[j] = arv->chave[j+1];
+  //    for(j=i+1; j <= arv->nchaves; j++)  //remover ponteiro para filho[i+1]
+    //    arv->filho[j] = arv->filho[j+1];
+    //  arv->filho[j] = NULL; //Campello
+    //  arv->nchaves--;
+    //  arv->filho[i] = remover(arv->filho[i], ch, t);
+    //  return arv;
+    //}Não haverá remoção em nós intermediários
   }
 
   TAB *y = arv->filho[i], *z = NULL;
@@ -261,7 +265,7 @@ TAB* remover(TAB* arv, int ch, int t){
         y->nchaves++;
         int j;
         for(j=0; j < t-1; j++){
-          y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+          y->chave[t+j] = z->chave[j];    //passar filho[i+1] para filho[i]
           y->nchaves++;
         }
         if(!y->folha){
