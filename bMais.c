@@ -43,11 +43,10 @@ void Imprime(TAB *a, int andar){
 
 
 TAB *Busca(TAB* x, int ch){
-  TAB *resp = NULL;
-  if(!x) return resp;
+  if(!x) return x;
   int i = 0;
-  while(i < x->nchaves && ch > x->chave[i]) i++;
-  if(i < x->nchaves && ch == x->chave[i]){
+  while(i < x->nchaves && x->chave[i] < ch) i++;
+  if((i < x->nchaves) && (ch == x->chave[i])){
     if(x->folha) return x;
     return Busca(x->filho[i+1], ch);
   }
