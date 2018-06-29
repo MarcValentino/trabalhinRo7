@@ -172,6 +172,7 @@ TAB* remover(TAB* arv, int ch, int t){
   int i;
   printf("Removendo %d...\n", ch);
   for(i = 0; i<arv->nchaves && arv->chave[i] < ch; i++);
+  if(arv->chave[i]==ch && !arv->folha) i++;
   if(i < arv->nchaves && ch == arv->chave[i]){ //CASOS 1, 2A, 2B e 2C
     if(arv->folha){ //CASO 1
       printf("\nCASO 1\n");
@@ -224,7 +225,7 @@ TAB* remover(TAB* arv, int ch, int t){
   TAB *y = arv->filho[i], *z = NULL;
   if (y->nchaves == t-1){ //CASOS 3A e 3B
     if(y->folha){
-      if((i < arv->nchaves) && (arv->filho[i+1]->nchaves)){ //CASO 3A
+      if((i < arv->nchaves) && (arv->filho[i+1]->nchaves >=t)){ //CASO 3A
         printf("\nCASO 3A: i menor que nchaves\n");
         z = arv->filho[i+1];
         //y->chave[t-1] = arv->chave[i];   //dar a y a chave i da arv
