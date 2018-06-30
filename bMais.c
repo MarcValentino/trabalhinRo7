@@ -169,10 +169,14 @@ TAB* remover(TAB* arv, int ch, int t){
     printf("n tem nada\n");
     return arv;
   }
-  int i;
+  Imprime(arv, 0);
+  int i, trocou = 0;
   printf("Removendo %d...\n", ch);
   for(i = 0; i<arv->nchaves && arv->chave[i] < ch; i++);
-  if(arv->chave[i]==ch && !arv->folha) i++;
+  if(arv->chave[i]==ch && !arv->folha){
+    i++;
+    trocou = 1;
+  }
   if(i < arv->nchaves && ch == arv->chave[i]){ //CASOS 1, 2A, 2B e 2C
     if(arv->folha){ //CASO 1
       printf("\nCASO 1\n");
@@ -260,21 +264,31 @@ TAB* remover(TAB* arv, int ch, int t){
       }
     }
 
-    if(!z){ //CASO 3B
+    if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR(Funcionando só para o caso i=0)
       if(i < arv->nchaves && arv->filho[i+1]->nchaves == t-1){
         printf("\nCASO 3B: i menor que nchaves\n");
         z = arv->filho[i+1];
-        y->chave[t-1] = arv->chave[i];     //pegar chave [i] e coloca ao final de filho[i]
-        y->nchaves++;
         int j;
-        for(j=0; j < t-1; j++){
-          y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
-          y->nchaves++;
-        }
         if(!y->folha){
+          y->chave[t-1] = arv->chave[i];     //pegar chave [i] e coloca ao final de filho[i]
+          y->nchaves++;
+          for(j=0; j < t-1; j++){
+            y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+            y->nchaves++;
+          }
+
           for(j=0; j<t; j++){
             y->filho[t+j] = z->filho[j];
           }
+
+        }else{
+          for(j=0; j < t-1; j++){
+            y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+            y->nchaves++;
+          }
+          z = y; //aposto que é isso quebrando, mas estou sem forças KKKKKKKK
+          //vou dormir
+          //bj
         }
         for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
           arv->chave[j] = arv->chave[j+1];
