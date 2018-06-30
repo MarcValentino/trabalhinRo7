@@ -169,6 +169,7 @@ TAB* remover(TAB* arv, int ch, int t){
     printf("n tem nada\n");
     return arv;
   }
+  printf("arv tem %d chaves\n", arv->nchaves);
   Imprime(arv, 0);
   int i, trocou = 0;
   printf("Removendo %d...\n", ch);
@@ -286,9 +287,7 @@ TAB* remover(TAB* arv, int ch, int t){
             y->chave[t-1+j] = z->chave[j];     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
-          arv->filho[i+1] = y; //aposto que é isso quebrando, mas estou sem forças KKKKKKKK
-          //vou dormir
-          //bj
+          arv->filho[i+1] = y;
         }
         for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
           arv->chave[j] = arv->chave[j+1];
