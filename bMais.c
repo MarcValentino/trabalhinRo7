@@ -42,17 +42,45 @@ void Imprime(TAB *a, int andar){
 }
 
 
-TAB *Busca(TAB* x, int ch){
-  if(!x) return x;
+TAB *Busca(TAB* arv, char *ch){
+  if(!arv) return x;
   int i = 0;
-  while(i < x->nchaves && x->chave[i] < ch) i++;
-  if((i < x->nchaves) && (ch == x->chave[i])){
-    if(x->folha) return x;
-    return Busca(x->filho[i+1], ch);
+  while(i < arv->nchaves && strcasecmp(arv->chave[i] < ch)<0) i++;
+  if((i < arv->nchaves) && strcasecmp(arv->chave[i], ch)==0){
+    if(arv->folha) return x;
+    return Busca(arv->filho[i+1], ch);
   }
-  return Busca(x->filho[i], ch);
+  return Busca(arv->filho[i], ch);
 }
 
+Info *BuscaInfos(char *chave, TAB *arv){
+  TAB *no = Busca(chave, arv);
+  if(!no) return NULL;
+  while(i < arv->nchaves && strcasecmp(arv->chave[i] < ch)<0) i++;
+  return no->infos[i];
+  //if(!arv) return NULL;
+  //int i = 0;
+  //while(i < arv->nchaves && strcasecmp(arv->chave[i],chave)<0) i++;
+  //if((i < arv->nchaves) && strcasecmp(ch == arv->chave[i]==0)){
+  //  if(arv->folha) return arv->infos[i]; //ponteiro para as infos
+  //  return BuscaInfos(arv->filho[i+1], ch);
+  //}
+  //return BuscaInfos(arv->filho[i], ch);
+}
+
+void AlteraUmaInfo(char *chave, TAB *arv){
+  Info *infos = BuscaInfos(chave, arv);
+  if(!infos) return;
+  printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
+  infos->nMusicas, infos->minutos, infos->nmAlbum);
+  printf("Digite os novos valores: \n");
+  printf("Musicas: ");
+  scanf("%d", &infos->nMusicas);
+  printf("Minutos: ");
+  scanf("%d", &infos->minutos);
+  printf("Nome do Album: ");
+  scanf("%d", infos->nmAlbum);
+}
 
 TAB *Inicializa(){
   return NULL;
