@@ -283,10 +283,10 @@ TAB* remover(TAB* arv, int ch, int t){
 
         }else{
           for(j=0; j < t-1; j++){
-            y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+            y->chave[t-1+j] = z->chave[j];     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
-          z = y; //aposto que é isso quebrando, mas estou sem forças KKKKKKKK
+          arv->filho[i+1] = y; //aposto que é isso quebrando, mas estou sem forças KKKKKKKK
           //vou dormir
           //bj
         }
