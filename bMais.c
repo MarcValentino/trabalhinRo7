@@ -5,9 +5,9 @@
 TAB *Cria(int t){
   TAB* novo = (TAB*)malloc(sizeof(TAB));
   novo->nchaves = 0;
-  novo->chave =(char**)malloc(sizeof(char**)*((t*2)-1)); //É assim? Não sei se ta certo (Thiago aqui)
+  novo->chave =(char**)malloc(((t*2)-1)*sizeof(char*)); //mudei de sizeof(char**) para sizeof(char*)
   novo->folha=1;
-  novo->filho = (TAB**)malloc(sizeof(TAB*)*t*2);
+  novo->filho = (TAB**)malloc(sizeof(TAB*)*(t*2));
   int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
   novo->prox = NULL;
@@ -127,11 +127,8 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
 
     > 0: conteúdo da string1 é maior do que string2
     */
-<<<<<<< HEAD
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)){ //se chave for menor que o conteudo de no atual
-=======
-    while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))){ //se chave for menor que o conteudo de no atual
->>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
+    while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)){ //se chave for menor que o conteudo de no atual
       arv->chave[i+1] = arv->chave[i];
       i--;
     }
@@ -139,21 +136,16 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
     arv->nchaves++;
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
-<<<<<<< HEAD
   while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
-=======
-  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))) i--; //se chave for menor que o conteudo de no atual
->>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
+  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
   i++;
   if(arv->filho[i]->nchaves == ((2*t)-1)){
     arv = Divisao(arv, (i+1), arv->filho[i], t); //o que é i+1??? na outra era 1 só
     if(strcmp(chave, arv->chave[i]) > 0) i++; //se chave for maior que o conteudo de no atual
   }
-<<<<<<< HEAD
   arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, adic, t);
-=======
+
   arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, t);
->>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
   return arv;
 }
 
