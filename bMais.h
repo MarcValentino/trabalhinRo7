@@ -42,4 +42,4 @@ void AlteraUmaInfo(char *chave, TAB *arv);
 void ImprimeInfos(TAB *a, int andar);
 
 //funcoes do arquivo.c
-void  leLinhas(TAB *arv, char *nome);
+TAB* leLinhas(TAB *arv, char *nome);

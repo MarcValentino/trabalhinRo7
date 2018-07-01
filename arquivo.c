@@ -3,7 +3,7 @@
 #include <string.h>
 #include "bMais.h"
 
-void leLinhas(TAB *arv, char *nome){
+TAB* leLinhas(TAB *arv, char *nome){
   FILE *arq;
   arq = fopen(nome, "r");
   int t = 2;
@@ -45,4 +45,6 @@ void leLinhas(TAB *arv, char *nome){
   Imprime(arv,0);
   printf("#################\n");
   printf("\n");
+
+  return arv;
 }

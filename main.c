@@ -7,7 +7,16 @@ int main(int argc, char *argv[]){
   char nmArq[128];
   printf("Digite o nome do arquivo: ");
   scanf("%s", nmArq);
-  leLinhas(arvore, nmArq);
+  arvore = leLinhas(arvore, nmArq);
+
+  printf("\n");
+  printf("#################\n");
+  printf("Número de Chaves: %d\n",arvore->nchaves);
+  printf("\n");
+  printf("Árvore: \n");
+  Imprime(arvore,0);
+  printf("#################\n");
+  printf("\n");
   /*
   int num = 0, from, to;
   while(num != -1){
