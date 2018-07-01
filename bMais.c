@@ -63,21 +63,15 @@ TAB *Inicializa(){
 TAB *Divisao(TAB *x, int i, TAB* y, int t){
   TAB *z=Cria(t);
   if(y->folha){
-    TAB *proxOrig = y->prox;
+    TAB *proxOrig = y->prox; //auxiliar que guarda valor do proximo do no dividido
     z->nchaves= t;
     z->folha = 1;
     int j;
     for(j=0;j<t;j++) z->chave[j] = y->chave[j+t-1];
-    if(!y->folha){
-      for(j=0;j<t;j++){
-        z->filho[j] = y->filho[j+t];
-        y->filho[j+t] = NULL;
-      }
-    }
     y->nchaves = t - 1;
-    for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j];
+    for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j]; //só entra nesse for quando chama pela remover
     x->filho[i] = z;
-    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1];
+    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1]; //só entra nesse for quando chama pela remover
     x->chave[i-1] = y->chave[t-1];
     x->nchaves++;
     // printf("####################\n");
@@ -120,25 +114,25 @@ void testeFolhas(TAB *t){
   }
 }
 
-TAB *Insere_Nao_Completo(TAB *x, int k, int t){
-  int i = x->nchaves-1;
-  if(x->folha){
-    while((i>=0) && (k<x->chave[i])){
-      x->chave[i+1] = x->chave[i];
+TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
+  int i = arv->nchaves-1;
+  if(arv->folha){
+    while((i>=0) && (k<arv->chave[i])){
+      arv->chave[i+1] = arv->chave[i];
       i--;
     }
-    x->chave[i+1] = k;
-    x->nchaves++;
-    return x;
+    arv->chave[i+1] = k;
+    arv->nchaves++;
+    return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
-  while((i>=0) && (k<x->chave[i])) i--;
+  while((i>=0) && (k<arv->chave[i])) i--;
   i++;
-  if(x->filho[i]->nchaves == ((2*t)-1)){
-    x = Divisao(x, (i+1), x->filho[i], t);
-    if(k>x->chave[i]) i++;
+  if(arv->filho[i]->nchaves == ((2*t)-1)){
+    arv = Divisao(arv, (i+1), arv->filho[i], t);
+    if(k>arv->chave[i]) i++;
   }
-  x->filho[i] = Insere_Nao_Completo(x->filho[i], k, t);
-  return x;
+  arv->filho[i] = Insere_Nao_Completo(arv->filho[i], k, t);
+  return arv;
 }
 
 

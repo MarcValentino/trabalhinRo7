@@ -2,13 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct info{
-  char cantor[100];
-  int ano;
-  int nMusicas;
-  int minutos;
-  char nmAlbum[100];
-}Info;
 
 void leLinhas(char *nome){
   FILE *arq;

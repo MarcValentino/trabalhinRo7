@@ -2,9 +2,18 @@
 #include <stdlib.h>
 
 //const int t = 2;
+typedef struct info{
+  char cantor[100];
+  int ano;
+  int nMusicas;
+  int minutos;
+  char nmAlbum[100];
+}Info;
 
 typedef struct ArvB{
-  int nchaves, folha, *chave;
+  int nchaves, folha;
+  char **chave;
+  struct Info *adic;
   struct ArvB **filho, *prox;
 }TAB;
 
