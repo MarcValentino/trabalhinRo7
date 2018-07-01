@@ -4,7 +4,6 @@
 #include "bMais.h"
 
 TAB *Cria(int t){
-  printf("criando\n");
   TAB* novo = (TAB*)malloc(sizeof(TAB));
   novo->nchaves = 0;
   novo->chave =(char**)malloc(((t*2)-1)*sizeof(char*)); //mudei de sizeof(char**) para sizeof(char*)
@@ -17,7 +16,6 @@ TAB *Cria(int t){
   novo->prox = NULL;
   Info **infos = (Info **) malloc(sizeof(Info*)*((2*t)-1));
   novo->adic = infos;
-  printf("terminou de criar\n");
   return novo;
 }
 
@@ -39,7 +37,6 @@ TAB *Libera(TAB *a){
 
 void Imprime(TAB *a, int andar){
   if(a){
-    printf("arvore nao vazia");
     int i,j;
     for(i=0; i<=a->nchaves-1; i++){
       Imprime(a->filho[i],andar+1);
@@ -70,9 +67,8 @@ void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
 }
 
 TAB *Busca(TAB* arv, char *ch){
-  printf("Procurando por: ch\n");
+  //printf("Procurando por: ch\n");
   if(!arv){
-    printf("cabou\n");
     return arv;
   }
   int i = 0;
@@ -178,9 +174,8 @@ void testeFolhas(TAB *t){
 TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
   printf("Insere Nao Completo a chave \n");
   printf("Arvore antes de inserir chico:\n");
-  Imprime(arv,0);
   int i = arv->nchaves-1;
-  printf("%d", i);
+  //printf("%d", i);
   if(arv->folha){
     printf("É folha\n");
 
@@ -193,15 +188,11 @@ TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
     */
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) { //se chave for menor que o conteudo de no atual
       strcpy(arv->chave[i+1], arv->chave[i]);
-      Imprime(arv,0);
       i--;
     }
     strcpy(arv->chave[i+1], chave);
-    printf("era pra aparecer cassia e chico\n");
     //printf("Nova chave inserida: %s\n", arv->chave[i+1]);
     arv->nchaves++;
-    Imprime(arv,0);
-
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
   while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
@@ -221,16 +212,11 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     return T;
   }  //modificar a funcao busca p/ char
   if(!T){
-    printf("Árvore vazia\n");
     T=Cria(t);
-    printf("ANTES\n" );
     //int nChars = (int) sizeof();
     //printf("%d\n", nChars);
     strcpy(T->chave[0], chave);
-    printf("DEPOIS\n");
     T->nchaves=1;
-    printf("Tinha que inserir a cassia:\n");
-    Imprime(T,0);
     return T;
   }
   if(T->nchaves == (2*t)-1){
@@ -243,73 +229,34 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     S = Insere_Nao_Completo(S,chave, adic, t);
     return S;
   }
-  printf("Vai inserir normal\n");
+  //printf("Vai inserir normal\n");
   T = Insere_Nao_Completo(T,chave, adic, t);
-  Imprime(T,0);
   return T;
 }
 
-/*
-TAB* remover(TAB* arv, int ch, int t){
+
+TAB* remover(TAB* arv, char *ch, int t){
   if(!arv){
     printf("nao tem nada\n");
     return arv;
-  }
-  Imprime(arv, 0);
+  }//suave
+
   int i, trocou = 0;
-  printf("Removendo %d...\n", ch);
-  for(i = 0; i<arv->nchaves && arv->chave[i] < ch; i++);
-  if(arv->chave[i]==ch && !arv->folha){
-    i++;
-    trocou = 1;
-  }
-  if(i < arv->nchaves && ch == arv->chave[i]){ //CASOS 1, 2A, 2B e 2C
+  printf("Removendo %s...\n", ch);
+  for(i = 0; i<arv->nchaves &&  strcasecmp(arv->chave[i], ch) < 0; i++);
+    if(strcasecmp(arv->chave[i] , ch) == 0 && !arv->folha){
+      i++;
+      trocou = 1;
+    }
+  if(i < arv->nchaves && strcasecmp(arv->chave[i], ch )== 0){ //CASOS 1
     if(arv->folha){ //CASO 1
       printf("\nCASO 1\n");
       int j;
-      for(j=i; j<arv->nchaves-1;j++) arv->chave[j] = arv->chave[j+1];
+      for(j=i; j<arv->nchaves-1;j++) strcpy(arv->chave[j], arv->chave[j+1]);
       arv->nchaves--;
       return arv;
     }
-    //if(!arv->folha && arv->filho[i]->nchaves >= t){ //CASO 2A
-    //  printf("\nCASO 2A\n");
-    //  TAB *y = arv->filho[i];  //Encontrar o predecessor k' de k na árvore com raiz em y
-    //  while(!y->folha) y = y->filho[y->nchaves];
-    //  int temp = y->chave[y->nchaves-1];
-    //  arv->filho[i] = remover(arv->filho[i], temp, t);
-    //  //Eliminar recursivamente K e substitua K por K' em x
-  //  //  arv->chave[i] = temp;
-    //  return arv;
-    //}
-    //if(!arv->folha && arv->filho[i+1]->nchaves >= t){ //CASO 2B
-    //  printf("\nCASO 2B\n");
-    //  TAB *y = arv->filho[i+1];  //Encontrar o sucessor k' de k na árvore com raiz em y
-  //    while(!y->folha) y = y->filho[0];
-    //  int temp = y->chave[0];
-    //  y = remover(arv->filho[i+1], temp, t); //Eliminar recursivamente K e substitua K por K' em x
-    //  arv->chave[i] = temp;
-    //  return arv;
-    //}//
-    //if(!arv->folha && arv->filho[i+1]->nchaves == t-1 && arv->filho[i]->nchaves == t-1){ //CASO 2C
-    //  printf("\nCASO 2C\n");
-    //  TAB *y = arv->filho[i];
-    //  TAB *z = arv->filho[i+1];
-    //  y->chave[y->nchaves] = ch;          //colocar ch ao final de filho[i]
-    //  int j;
-  //  //  for(j=0; j<t-1; j++)                //juntar chave[i+1] com chave[i]
-    //    y->chave[t+j] = z->chave[j];
-    //  for(j=0; j<=t; j++)                 //juntar filho[i+1] com filho[i]
-    //    y->filho[t+j] = z->filho[j];
-    //  y->nchaves = 2*t-1;
-    //  for(j=i; j < arv->nchaves-1; j++)   //remover ch de arv
-    //    arv->chave[j] = arv->chave[j+1];
-  //    for(j=i+1; j <= arv->nchaves; j++)  //remover ponteiro para filho[i+1]
-    //    arv->filho[j] = arv->filho[j+1];
-    //  arv->filho[j] = NULL; //Campello
-    //  arv->nchaves--;
-    //  arv->filho[i] = remover(arv->filho[i], ch, t);
-    //  return arv;
-    //}Não haverá remoção em nós intermediários
+    //Não haverá remoção em nós intermediários
   }
 
   TAB *y = arv->filho[i], *z = NULL;
@@ -318,38 +265,38 @@ TAB* remover(TAB* arv, int ch, int t){
       if((i < arv->nchaves) && (arv->filho[i+1]->nchaves >=t)){ //CASO 3A
         printf("\nCASO 3A: i menor que nchaves\n");
         z = arv->filho[i+1];
-        //y->chave[t-1] = arv->chave[i];   //dar a y a chave i da arv
+        //y->chave[t-1] = arv->chave[i];   //só para b: dar a y a chave i da arv
         int j;
         //for(j=0; j < z->nchaves-1; j++)  //ajustar chaves de z
           //z->chave[j] = z->chave[j+1];
         //z->chave[j] = 0; Rosseti
-        y->chave[y->nchaves] = z->chave[0];
+        strcpy(y->chave[y->nchaves], z->chave[0]); //pega a primeira chave do irmao da direita
         y->nchaves++;
         for(j=0; j < z->nchaves; j++)       //ajustar filhos de z
-          z->chave[j] = z->chave[j+1];
+          strcpy(z->chave[j], z->chave[j+1]);
         z->nchaves--;
-        arv->chave[i] = z->chave[0];//dar a arv uma chave de z
+        strcpy(arv->chave[i], z->chave[0]); //dar a arv uma chave de z
         arv->filho[i] = remover(arv->filho[i], ch, t);
         return arv;
       }
       if((i > 0) && (!z) && (arv->filho[i-1]->nchaves >=t)){ //CASO 3A
-        printf("\nCASO 3A: i igual a nchaves\n");
+        printf("\nCASO 3A: i igual a nchaves\n");  //remover a chave do ultimo filho
         z = arv->filho[i-1];
         int j;
         for(j = y->nchaves; j>0; j--)               //encaixar lugar da nova chave
-          y->chave[j] = y->chave[j-1];
-        //for(j = y->nchaves+1; j>0; j--)             //encaixar lugar dos filhos da nova chave
+          strcpy(y->chave[j], y->chave[j-1]);
+        //for(j = y->nchaves+1; j>0; j--)             //enca(ixar lugar dos filhos da nova chave
           //y->filho[j] = y->filho[j-1];
         //y->chave[0] = arv->chave[i-1];              //dar a y a chave i da arv
         y->nchaves++;
-        arv->chave[i-1] = z->chave[z->nchaves-1];   //dar a arv uma chave de z
-        y->chave[0] = z->chave[z->nchaves-1];         //enviar ponteiro de z para o novo elemento em y
+        strcpy(arv->chave[i-1], z->chave[z->nchaves-1]);   //dar a arv uma chave de z
+        strcpy(y->chave[0], z->chave[z->nchaves-1]);         //enviar ponteiro de z para o novo elemento em y
         z->nchaves--;
         arv->filho[i] = remover(y, ch, t);
         return arv;
       }
     }
-
+    /* comentando para testar o 3a
     if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR(Funcionando só para o caso i=0)
       if(i < arv->nchaves && arv->filho[i+1]->nchaves == t-1){
         printf("\nCASO 3B: i menor que nchaves\n");
@@ -407,15 +354,15 @@ TAB* remover(TAB* arv, int ch, int t){
         arv = remover(arv, ch, t);
         return arv;
       }
-    }
+    }*/
   }
   arv->filho[i] = remover(arv->filho[i], ch, t);
   return arv;
 }
 
 
-TAB* retira(TAB* arv, int k, int t){
-  if(!arv || !Busca(arv, k)) return arv;
-  return remover(arv, k, t);
+TAB* retira(TAB* arv, char *chave, int t){
+  if(!arv || !Busca(arv, chave)) return arv;
+  return remover(arv, chave, t);
 }
-*/
+

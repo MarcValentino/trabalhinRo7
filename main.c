@@ -10,6 +10,8 @@ int main(int argc, char *argv[]){
   arvore = leLinhas(arvore, nmArq);
 
   Imprime(arvore, 0);
+  retira(arvore, "Marcelo Valentino1999", t);
+  Imprime(arvore, 0);
   /*
   int num = 0, from, to;
   while(num != -1){

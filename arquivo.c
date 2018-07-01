@@ -38,7 +38,6 @@ TAB* leLinhas(TAB *arv, char *nome){
         strcpy(infos->nmAlbum, token);
         printf("%s", chave);
         arv = Insere(arv, chave, infos, t);
-        Imprime(arv,0);
       }
       return arv;
   }
