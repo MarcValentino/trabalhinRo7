@@ -10,13 +10,13 @@ TAB* leLinhas(TAB *arv, char *nome){
   char linha[256], *token;
   while (fgets(linha, sizeof(linha), arq)){
         Info *infos = (Info *) malloc(sizeof(Info));
+
         token = strtok(linha, "/");
 
         //while(token){
         //  printf("%s\n", token);
         //  token = strtok(NULL, "/");
         //}
-
         strcpy(infos->cantor, token);
         token = strtok(NULL, "/");
         char chave[200];
@@ -36,9 +36,16 @@ TAB* leLinhas(TAB *arv, char *nome){
         infos->minutos = atoi(token);
         token = strtok(NULL, "/");
         strcpy(infos->nmAlbum, token);
-        printf("%s", chave);
-        arv = Insere(arv, chave, infos, t);
-        Imprime(arv,0);
+/*
+
+                printf("INFORMACOES DO TOKEN:\n");
+                printf("CANTOR: %s\n", infos->cantor);
+                printf("ano: %d\n", infos->ano);
+                printf("nMusicas: %d\n", infos->nMusicas);
+                printf("minutos: %d\n", infos->minutos);
+                printf("nmAlbum: %s\n", infos->nmAlbum);
+*/      arv = Insere(arv, chave, infos, t);
+
       }
       return arv;
   }

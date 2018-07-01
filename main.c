@@ -9,7 +9,8 @@ int main(int argc, char *argv[]){
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
 
-  Imprime(arvore, 0);
+  ImprimeInfos(arvore, 0);
+  //Imprime(arvore, 0);
   /*
   int num = 0, from, to;
   while(num != -1){
