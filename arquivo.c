@@ -3,9 +3,9 @@
 #include <string.h>
 #include "bMais.h"
 
-void leLinhas(TAB *arv){
+void leLinhas(TAB *arv, char *nome){
   FILE *arq;
-  arq = fopen("bd", "r");
+  arq = fopen(nome, "r");
   int t = 2;
   char linha[256], *token;
   while (fgets(linha, sizeof(linha), arq)){
@@ -33,7 +33,8 @@ void leLinhas(TAB *arv){
         token = strtok(NULL, "/");
         strcpy(infos->nmAlbum, token);
 
-        Insere(arv, chave, infos, t);
+       arv = Insere(arv, chave, infos, t);
+       Imprime(arv,0);
       }
   }
 

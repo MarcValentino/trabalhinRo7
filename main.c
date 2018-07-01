@@ -3,6 +3,9 @@
 int main(int argc, char *argv[]){
   int t = 2;
   TAB * arvore = Inicializa();
+  char *nmArq;
+  scanf("%s", nmArq);
+  leLinhas(arvore, nmArq);
 
   int num = 0, from, to;
   while(num != -1){

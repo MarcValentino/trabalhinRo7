@@ -37,23 +37,71 @@ void Imprime(TAB *a, int andar){
     int i,j;
     for(i=0; i<=a->nchaves-1; i++){
       Imprime(a->filho[i],andar+1);
-      for(j=0; j<=andar; j++) printf("   ");
-      printf("%d\n", a->chave[i]);
+      for(j=0; j</=andar; j++) printf("   ");
+      printf("%s\n", a->chave[i]);
     }
     Imprime(a->filho[i],andar+1);
   }
 }
 
-
-TAB *Busca(TAB* x, int ch){
-  if(!x) return x;
-  int i = 0;
-  while(i < x->nchaves && x->chave[i] < ch) i++;
-  if((i < x->nchaves) && (ch == x->chave[i])){
-    if(x->folha) return x;
-    return Busca(x->filho[i+1], ch);
+void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
+  if(a){
+    int i,j;
+    for(i=0; i<=a->nchaves-1; i++){
+      Imprime(a->filho[i],andar+1);
+      for(j=0; j<=andar; j++) printf("   ");
+      if(a->folha){
+        printf("Chave: %s\n", a->chave[i]);
+        printf("Cantor: %s\n", a->adic->cantor);
+        printf("Ano: %d\n", a->adic->ano);
+        printf("No Musicas: %d\n", a->adic->nMusicas);
+        printf("Minutos: %d\n", a->adic->minutos);
+        printf("Album: %s\n", a->adic->nmAlbum);
+      }
+    }
+    Imprime(a->filho[i],andar+1);
   }
-  return Busca(x->filho[i], ch);
+}
+
+TAB *Busca(TAB* arv, char *ch){
+  if(!arv) return arv;
+  int i = 0;
+  while(i < arv->nchaves && strcasecmp(arv->chave[i], ch)<0) i++;
+  if((i < arv->nchaves) && strcasecmp(arv->chave[i], ch)==0){
+    if(arv->folha) return arv;
+    return Busca(arv->filho[i+1], ch);
+  }
+  return Busca(arv->filho[i], ch);
+}
+
+Info *BuscaInfos(char *chave, TAB *arv){
+  TAB *no = Busca(chave, arv);
+  if(!no) return NULL;
+  while(i < arv->nchaves && strcasecmp(arv->chave[i], ch)<0) i++;
+  return no->infos[i];
+  //if(!arv) return NULL;
+  //int i = 0;
+  //while(i < arv->nchaves && strcasecmp(arv->chave[i],chave)<0) i++;
+  //if((i < arv->nchaves) && strcasecmp(ch == arv->chave[i]==0)){
+  //  if(arv->folha) return arv->infos[i]; //ponteiro para as infos
+  //  return BuscaInfos(arv->filho[i+1], ch);
+  //}
+  //return BuscaInfos(arv->filho[i], ch);
+}
+
+void AlteraUmaInfo(char *chave, TAB *arv){
+  Info *infos = BuscaInfos(chave, arv);
+  if(!infos) return;
+  printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
+  infos->nMusicas, infos->minutos, infos->nmAlbum);
+
+  printf("Digite os novos valores: \n");
+  printf("Musicas: ");
+  scanf("%d", &infos->nMusicas);
+  printf("Minutos: ");
+  scanf("%d", &infos->minutos);
+  printf("Nome do Album: ");
+  scanf("%s", infos->nmAlbum);
 }
 
 
@@ -62,23 +110,20 @@ TAB *Inicializa(){
 }
 
 
-TAB *Divisao(TAB *x, int i, TAB* y, int t){
+TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar o z, novo nó da direita
   TAB *z=Cria(t);
   if(y->folha){
-    TAB *proxOrig = y->prox; //auxiliar que guarda valor do proximo do no dividido
+    TAB *proxOrig = y->prox; //auxiliar que guarda valor do proximo no dividido
     z->nchaves= t;
     z->folha = 1;
     int j;
-    for(j=0;j<t;j++) z->chave[j] = y->chave[j+t-1];
+    for(j=0;j<t;j++) strcpy(z->chave[j], y->chave[j+t-1]); //z vai ser o filho da direita
     y->nchaves = t - 1;
     for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j]; //só entra nesse for quando tem pai
     x->filho[i] = z;
-    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1]; //só entra nesse for quando tem pai
-    x->chave[i-1] = y->chave[t-1];
+    for(j=x->nchaves; j>=i; j--) strcpy(x->chave[j], x->chave[j-1]); //só entra nesse for quando tem pai
+    strcpy(x->chave[i-1], y->chave[t-1]);
     x->nchaves++;
-    // printf("####################\n");
-    // Imprime(x, 0);
-    // printf("####################\n");
     if((y->folha)&&(z->folha)) y->prox = z;
     if(proxOrig) z->prox = proxOrig;
     return x;
@@ -128,15 +173,13 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
     > 0: conteúdo da string1 é maior do que string2
     */
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)){ //se chave for menor que o conteudo de no atual
-    while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)){ //se chave for menor que o conteudo de no atual
-      arv->chave[i+1] = arv->chave[i];
+      strcpy(arv->chave[i+1], arv->chave[i]);
       i--;
     }
-    arv->chave[i+1] = chave;
+    strcpy(arv->chave[i+1], chave);
     arv->nchaves++;
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
-  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
   while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
   i++;
   if(arv->filho[i]->nchaves == ((2*t)-1)){
@@ -144,8 +187,6 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
     if(strcmp(chave, arv->chave[i]) > 0) i++; //se chave for maior que o conteudo de no atual
   }
   arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, adic, t);
-
-  arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, t);
   return arv;
 }
 

@@ -36,3 +36,11 @@ TAB *Insere(TAB *T, char **chave, Info *adic, int t);
 TAB* remover(TAB* arv, int ch, int t);
 TAB* retira(TAB* arv, int k, int t);
 void testeFolhas(TAB *t);
+TAB *Busca(TAB* arv, char *ch);
+Info *BuscaInfos(char *chave, TAB *arv);
+void AlteraUmaInfo(char *chave, TAB *arv);
+void ImprimeInfos(TAB *a, int andar);
+
+//funcoes do arquivo.c
+void  leLinhas(TAB *arv, char *nome);
+
