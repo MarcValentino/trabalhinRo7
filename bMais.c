@@ -296,17 +296,17 @@ TAB* remover(TAB* arv, char *ch, int t){
         return arv;
       }
     }
-    /* comentando para testar o 3a
+
     if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR(Funcionando só para o caso i=0)
       if(i < arv->nchaves && arv->filho[i+1]->nchaves == t-1){
         printf("\nCASO 3B: i menor que nchaves\n");
         z = arv->filho[i+1];
         int j;
         if(!y->folha){
-          y->chave[t-1] = arv->chave[i];     //pegar chave [i] e coloca ao final de filho[i]
+          strcpy(y->chave[t-1], arv->chave[i]);     //pegar chave[i] e coloca ao final de filho[i]
           y->nchaves++;
           for(j=0; j < t-1; j++){
-            y->chave[t+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+            strcpy(y->chave[t+j], z->chave[j]);     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
 
@@ -316,21 +316,21 @@ TAB* remover(TAB* arv, char *ch, int t){
 
         }else{
           for(j=0; j < t-1; j++){
-            y->chave[t-1+j] = z->chave[j];     //passar filho[i+1] para filho[i]
+            strcpy(y->chave[t-1+j], z->chave[j]);     //passar filho[i+1] para filho[i]
             y->nchaves++;
           }
-          arv->filho[i+1] = y; //aposto que é isso quebrando, mas estou sem forças KKKKKKKK
-          //vou dormir
-          //bj
+          arv->filho[i+1] = y; 
+
         }
         for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
-          arv->chave[j] = arv->chave[j+1];
+          strcpy(arv->chave[j], arv->chave[j+1]);
           arv->filho[j+1] = arv->filho[j+2];
         }
         arv->nchaves--;
         arv = remover(arv, ch, t);
         return arv;
       }
+      /*comentando para testar o 3b i menor que nchaves
       if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){
         printf("\nCASO 3B: i igual a nchaves\n");
         z = arv->filho[i-1];
@@ -354,7 +354,8 @@ TAB* remover(TAB* arv, char *ch, int t){
         arv = remover(arv, ch, t);
         return arv;
       }
-    }*/
+      */
+    }
   }
   arv->filho[i] = remover(arv->filho[i], ch, t);
   return arv;

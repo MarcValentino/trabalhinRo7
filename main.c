@@ -12,6 +12,12 @@ int main(int argc, char *argv[]){
   Imprime(arvore, 0);
   retira(arvore, "Marcelo Valentino1999", t);
   Imprime(arvore, 0);
+  retira(arvore, "Marcolinha420", t);
+  Imprime(arvore, 0);
+  retira(arvore, "Paulinho da Viola1968", t);
+  Imprime(arvore, 0);
+  retira(arvore, "Cassia Eller2006", t);
+  Imprime(arvore, 0);
   /*
   int num = 0, from, to;
   while(num != -1){
