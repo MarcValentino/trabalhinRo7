@@ -17,6 +17,14 @@ typedef struct ArvB{
   struct ArvB **filho, *prox;
 }TAB;
 
+/* como era com inteiro antes
+typedef struct ArvB{ com inteiro
+  int nchaves, folha;
+  int *chave;
+  struct ArvB **filho, *prox;
+}TAB;
+*/
+
 TAB *Cria(int t);
 TAB *Libera(TAB *a);
 void Imprime(TAB *a, int andar);

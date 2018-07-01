@@ -59,7 +59,6 @@ TAB *Inicializa(){
 }
 
 
-
 TAB *Divisao(TAB *x, int i, TAB* y, int t){
   TAB *z=Cria(t);
   if(y->folha){
@@ -69,9 +68,9 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
     int j;
     for(j=0;j<t;j++) z->chave[j] = y->chave[j+t-1];
     y->nchaves = t - 1;
-    for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j]; //só entra nesse for quando chama pela remover
+    for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j]; //só entra nesse for quando tem pai
     x->filho[i] = z;
-    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1]; //só entra nesse for quando chama pela remover
+    for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1]; //só entra nesse for quando tem pai
     x->chave[i-1] = y->chave[t-1];
     x->nchaves++;
     // printf("####################\n");
@@ -92,7 +91,7 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){
     }
   }
   y->nchaves = t - 1;
-  for(j=x->nchaves; j>=i; j--) x->filho[j+1]=x->filho[j];
+  for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j];
   x->filho[i] = z;
   for(j=x->nchaves; j>=i; j--) x->chave[j] = x->chave[j-1];
   x->chave[i-1] = y->chave[t-1];
@@ -114,33 +113,41 @@ void testeFolhas(TAB *t){
   }
 }
 
-TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
+TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
   int i = arv->nchaves-1;
   if(arv->folha){
-    while((i>=0) && (k<arv->chave[i])){
+
+    /*
+    0: conteúdo das strings são iguais
+
+    < 0: conteúdo da string1 é menor do que string2
+
+    > 0: conteúdo da string1 é maior do que string2
+    */
+    while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))){ //se chave for menor que o conteudo de no atual
       arv->chave[i+1] = arv->chave[i];
       i--;
     }
-    arv->chave[i+1] = k;
+    arv->chave[i+1] = chave;
     arv->nchaves++;
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
-  while((i>=0) && (k<arv->chave[i])) i--;
+  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))) i--; //se chave for menor que o conteudo de no atual
   i++;
   if(arv->filho[i]->nchaves == ((2*t)-1)){
-    arv = Divisao(arv, (i+1), arv->filho[i], t);
-    if(k>arv->chave[i]) i++;
+    arv = Divisao(arv, (i+1), arv->filho[i], t); //o que é i+1??? na outra era 1 só
+    if(strcmp(chave, arv->chave[i]) > 0) i++; //se chave for maior que o conteudo de no atual
   }
-  arv->filho[i] = Insere_Nao_Completo(arv->filho[i], k, t);
+  arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, t);
   return arv;
 }
 
 
-TAB *Insere(TAB *T, int k, int t){
-  if(Busca(T,k)) return T;
+TAB *Insere(TAB *T, char **chave, Info *adic, int t){
+  if(Busca(T,chave)) return T; //modificar a funcao busca p/ char
   if(!T){
     T=Cria(t);
-    T->chave[0] = k;
+    T->chave[0] = chave;
     T->nchaves=1;
     return T;
   }
@@ -149,18 +156,18 @@ TAB *Insere(TAB *T, int k, int t){
     S->nchaves=0;
     S->folha = 0;
     S->filho[0] = T;
-    S = Divisao(S,1,T,t);
-    S = Insere_Nao_Completo(S,k,t);
+    S = Divisao(S,1,T,t); //acho que o 1 devia ser a metade de (2*t)-1 ???
+    S = Insere_Nao_Completo(S,chave, adic, t);
     return S;
   }
-  T = Insere_Nao_Completo(T,k,t);
+  T = Insere_Nao_Completo(T,chave, adic, t);
   return T;
 }
 
 
 TAB* remover(TAB* arv, int ch, int t){
   if(!arv){
-    printf("n tem nada\n");
+    printf("nao tem nada\n");
     return arv;
   }
   Imprime(arv, 0);
