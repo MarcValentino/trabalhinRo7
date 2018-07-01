@@ -42,3 +42,4 @@ int main(){
   char k[100] = "bd.txt";
   leLinhas(k);
 }
+

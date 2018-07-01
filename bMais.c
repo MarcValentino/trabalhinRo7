@@ -127,7 +127,11 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
 
     > 0: conteúdo da string1 é maior do que string2
     */
+<<<<<<< HEAD
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)){ //se chave for menor que o conteudo de no atual
+=======
+    while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))){ //se chave for menor que o conteudo de no atual
+>>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
       arv->chave[i+1] = arv->chave[i];
       i--;
     }
@@ -135,13 +139,21 @@ TAB *Insere_Nao_Completo(TAB *arv, char **chave, Info *adic, int t){
     arv->nchaves++;
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
+<<<<<<< HEAD
   while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
+=======
+  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0))) i--; //se chave for menor que o conteudo de no atual
+>>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
   i++;
   if(arv->filho[i]->nchaves == ((2*t)-1)){
     arv = Divisao(arv, (i+1), arv->filho[i], t); //o que é i+1??? na outra era 1 só
     if(strcmp(chave, arv->chave[i]) > 0) i++; //se chave for maior que o conteudo de no atual
   }
+<<<<<<< HEAD
   arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, adic, t);
+=======
+  arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, t);
+>>>>>>> 7f1b78f4e45136a9310da39cf50f3cdd5ff409f9
   return arv;
 }
 
