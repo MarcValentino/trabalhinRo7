@@ -7,7 +7,9 @@ int main(int argc, char *argv[]){
   char nmArq[128];
   printf("Digite o nome do arquivo: ");
   scanf("%s", nmArq);
-  leLinhas(arvore, nmArq);
+  arvore = leLinhas(arvore, nmArq);
+
+  Imprime(arvore, 0);
   /*
   int num = 0, from, to;
   while(num != -1){

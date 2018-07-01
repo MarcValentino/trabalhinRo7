@@ -3,7 +3,7 @@
 #include <string.h>
 #include "bMais.h"
 
-void leLinhas(TAB *arv, char *nome){
+TAB* leLinhas(TAB *arv, char *nome){
   FILE *arq;
   arq = fopen(nome, "r");
   int t = 2;
@@ -21,19 +21,24 @@ void leLinhas(TAB *arv, char *nome){
         token = strtok(NULL, "/");
         char chave[200];
         strcpy(chave, infos->cantor);
+        //printf("%s\n", chave);
         strcat(chave, token);
+        //printf("%s\n", chave);
 
         //printf("%s\n", chave);
 
         infos->ano = atoi(token);
+        //printf("%d\n", ano);
         token = strtok(NULL, "/");
         infos->nMusicas = atoi(token);
+        //printf("%d\n", infos->nMusicas);
         token = strtok(NULL, "/");
         infos->minutos = atoi(token);
         token = strtok(NULL, "/");
         strcpy(infos->nmAlbum, token);
-
-       arv = Insere(arv, chave, infos, t);
-       Imprime(arv,0);
+        printf("%s", chave);
+        arv = Insere(arv, chave, infos, t);
+        Imprime(arv,0);
       }
+      return arv;
   }

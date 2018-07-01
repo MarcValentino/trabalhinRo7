@@ -4,16 +4,20 @@
 #include "bMais.h"
 
 TAB *Cria(int t){
+  printf("criando\n");
   TAB* novo = (TAB*)malloc(sizeof(TAB));
   novo->nchaves = 0;
   novo->chave =(char**)malloc(((t*2)-1)*sizeof(char*)); //mudei de sizeof(char**) para sizeof(char*)
+  int i;
+  for(i=0;i<t*2-1;i++) novo->chave[i] = (char *) malloc((64)*sizeof(char));
   novo->folha=1;
   novo->filho = (TAB**)malloc(sizeof(TAB*)*(t*2));
-  int i;
+  //int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
   novo->prox = NULL;
   Info **infos = (Info **) malloc(sizeof(Info*)*((2*t)-1));
   novo->adic = infos;
+  printf("terminou de criar\n");
   return novo;
 }
 
@@ -35,6 +39,7 @@ TAB *Libera(TAB *a){
 
 void Imprime(TAB *a, int andar){
   if(a){
+    printf("arvore nao vazia");
     int i,j;
     for(i=0; i<=a->nchaves-1; i++){
       Imprime(a->filho[i],andar+1);
@@ -52,12 +57,12 @@ void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
       Imprime(a->filho[i],andar+1);
       for(j=0; j<=andar; j++) printf("   ");
       if(a->folha){
-        printf("Chave: %s\n", a->chave[i]);
-        printf("Cantor: %s\n", a->adic[i]->cantor);
-        printf("Ano: %d\n", a->adic[i]->ano);
-        printf("No Musicas: %d\n", a->adic[i]->nMusicas);
-        printf("Minutos: %d\n", a->adic[i]->minutos);
-        printf("Album: %s\n", a->adic[i]->nmAlbum);
+        //printf("Chave: %s\n", a->chave[i]);
+        //printf("Cantor: %s\n", a->adic[i]->cantor);
+        //printf("Ano: %d\n", a->adic[i]->ano);
+        //printf("No Musicas: %d\n", a->adic[i]->nMusicas);
+        //printf("Minutos: %d\n", a->adic[i]->minutos);
+        //printf("Album: %s\n", a->adic[i]->nmAlbum);
       }
     }
     Imprime(a->filho[i],andar+1);
@@ -65,11 +70,18 @@ void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
 }
 
 TAB *Busca(TAB* arv, char *ch){
-  if(!arv) return arv;
+  printf("Procurando por: ch\n");
+  if(!arv){
+    printf("cabou\n");
+    return arv;
+  }
   int i = 0;
   while(i < arv->nchaves && strcasecmp(arv->chave[i], ch)<0) i++;
   if((i < arv->nchaves) && strcasecmp(arv->chave[i], ch)==0){
-    if(arv->folha) return arv;
+    if(arv->folha){
+      printf("%s\n", arv->chave[i]);
+      return arv;
+    }
     return Busca(arv->filho[i+1], ch);
   }
   return Busca(arv->filho[i], ch);
@@ -94,8 +106,8 @@ Info *BuscaInfos(char *chave, TAB *arv){
 void AlteraUmaInfo(char *chave, TAB *arv){
   Info *infos = BuscaInfos(chave, arv);
   if(!infos) return;
-  printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
-  infos->nMusicas, infos->minutos, infos->nmAlbum);
+  //printf("Valores originais: \n%d musicas\n%d minutos\nNome do album: %s",
+  //infos->nMusicas, infos->minutos, infos->nmAlbum);
 
   printf("Digite os novos valores: \n");
   printf("Musicas: ");
@@ -103,7 +115,7 @@ void AlteraUmaInfo(char *chave, TAB *arv){
   printf("Minutos: ");
   scanf("%d", &infos->minutos);
   printf("Nome do Album: ");
-  scanf("%s", infos->nmAlbum);
+  //scanf("%s", infos->nmAlbum);
 }
 
 
@@ -158,14 +170,19 @@ void testeFolhas(TAB *t){
   while(p!=NULL){
     if(p->folha) printf("eh folha\n");
     int i;
-    for(i=0;i<p->nchaves;i++) printf("%s\n", p->chave[i]);
+    //for(i=0;i<p->nchaves;i++) printf("%s\n", p->chave[i]);
     p = p->prox;
   }
 }
 
 TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
+  printf("Insere Nao Completo a chave \n");
+  printf("Arvore antes de inserir chico:\n");
+  Imprime(arv,0);
   int i = arv->nchaves-1;
+  printf("%d", i);
   if(arv->folha){
+    printf("É folha\n");
 
     /*
     0: conteúdo das strings são iguais
@@ -176,10 +193,15 @@ TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
     */
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) { //se chave for menor que o conteudo de no atual
       strcpy(arv->chave[i+1], arv->chave[i]);
+      Imprime(arv,0);
       i--;
     }
     strcpy(arv->chave[i+1], chave);
+    printf("era pra aparecer cassia e chico\n");
+    //printf("Nova chave inserida: %s\n", arv->chave[i+1]);
     arv->nchaves++;
+    Imprime(arv,0);
+
     return arv;
   }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
   while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
@@ -194,14 +216,25 @@ TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
 
 
 TAB *Insere(TAB *T, char *chave, Info *adic, int t){
-  if(Busca(T,chave)) return T; //modificar a funcao busca p/ char
+  if(Busca(T,chave)){
+    //printf("achou %s na busca\n", chave);
+    return T;
+  }  //modificar a funcao busca p/ char
   if(!T){
+    printf("Árvore vazia\n");
     T=Cria(t);
-    T->chave[0] = chave;
+    printf("ANTES\n" );
+    //int nChars = (int) sizeof();
+    //printf("%d\n", nChars);
+    strcpy(T->chave[0], chave);
+    printf("DEPOIS\n");
     T->nchaves=1;
+    printf("Tinha que inserir a cassia:\n");
+    Imprime(T,0);
     return T;
   }
   if(T->nchaves == (2*t)-1){
+    printf("Nó cheio, tem que dividir\n");
     TAB *S = Cria(t);
     S->nchaves=0;
     S->folha = 0;
@@ -210,7 +243,9 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     S = Insere_Nao_Completo(S,chave, adic, t);
     return S;
   }
+  printf("Vai inserir normal\n");
   T = Insere_Nao_Completo(T,chave, adic, t);
+  Imprime(T,0);
   return T;
 }
 
