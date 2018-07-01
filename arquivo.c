@@ -9,31 +9,40 @@ void leLinhas(TAB *arv, char *nome){
   int t = 2;
   char linha[256], *token;
   while (fgets(linha, sizeof(linha), arq)){
-        Info *infos = (Info *) malloc(sizeof(Info));
-        token = strtok(linha, "/");
+    Info *infos = (Info *) malloc(sizeof(Info));
+    token = strtok(linha, "/");
 
-        //while(token){
-        //  printf("%s\n", token);
-        //  token = strtok(NULL, "/");
-        //}
+    //while(token){
+    //  printf("%s\n", token);
+    //  token = strtok(NULL, "/");
+    //}
 
-        strcpy(infos->cantor, token);
-        token = strtok(NULL, "/");
-        char chave[200];
-        strcpy(chave, infos->cantor);
-        strcat(chave, token);
+    strcpy(infos->cantor, token);
+    token = strtok(NULL, "/");
+    char chave[200];
+    strcpy(chave, infos->cantor);
+    strcat(chave, token);
 
-        //printf("%s\n", chave);
+    //printf("%s\n", chave);
 
-        infos->ano = atoi(token);
-        token = strtok(NULL, "/");
-        infos->nMusicas = atoi(token);
-        token = strtok(NULL, "/");
-        infos->minutos = atoi(token);
-        token = strtok(NULL, "/");
-        strcpy(infos->nmAlbum, token);
+    infos->ano = atoi(token);
+    token = strtok(NULL, "/");
+    infos->nMusicas = atoi(token);
+    token = strtok(NULL, "/");
+    infos->minutos = atoi(token);
+    token = strtok(NULL, "/");
+    strcpy(infos->nmAlbum, token);
 
-       arv = Insere(arv, chave, infos, t);
-       Imprime(arv,0);
-      }
+    arv = Insere(arv, chave, infos, t);
+    Imprime(arv,0);
   }
+
+  printf("\n");
+  printf("#################\n");
+  printf("Número de Chaves: %d\n",arv->nchaves);
+  printf("\n");
+  printf("Árvore: \n");
+  Imprime(arv,0);
+  printf("#################\n");
+  printf("\n");
+}
