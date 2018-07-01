@@ -3,6 +3,7 @@
 int main(int argc, char *argv[]){
   int t = 2;
   TAB * arvore = Inicializa();
+
   int num = 0, from, to;
   while(num != -1){
     printf("Digite um numero para adicionar. 0 para imprimir. -9 para remover, -2 para testeFolhas e -1 para sair\n");
