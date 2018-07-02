@@ -18,6 +18,13 @@ int main(int argc, char *argv[]){
   Imprime(arvore, 0);
   retira(arvore, "Cassia Eller2006", t);
   Imprime(arvore, 0);
+  retira(arvore, "Red Hot Chili Peppers2013", t);
+  Imprime(arvore, 0);
+  retira(arvore, "Red Hot Chili Peppers2006", t);
+  Imprime(arvore, 0);
+  retira(arvore, "Red Hot Chili Peppers2016", t);
+  Imprime(arvore, 0);
+
   /*
   int num = 0, from, to;
   while(num != -1){

@@ -363,8 +363,8 @@ TAB* remover(TAB* arv, char *ch, int t){
         arv = remover(arv, ch, t);
         return arv;
       }
-      /*comentando para testar o 3b i menor que nchaves
-      if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){
+      /*
+      if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){ //aqui da ruim
         printf("\nCASO 3B: i igual a nchaves\n");
         z = arv->filho[i-1];
         if(i == arv->nchaves)
