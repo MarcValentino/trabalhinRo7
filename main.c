@@ -10,18 +10,22 @@ int main(int argc, char *argv[]){
   arvore = leLinhas(arvore, nmArq);
 
   Imprime(arvore, 0);
-  retira(arvore, "Marcelo Valentino1999", t);
+  printf("\n");
+  retira(arvore, "Marcelo Valentino3000", t);
   Imprime(arvore, 0);
-  retira(arvore, "Marcolinha420", t);
-  Imprime(arvore, 0);
+  printf("\n");
   retira(arvore, "Paulinho da Viola1968", t);
   Imprime(arvore, 0);
+  printf("\n");
   retira(arvore, "Cassia Eller2006", t);
   Imprime(arvore, 0);
+  printf("\n");
   retira(arvore, "Red Hot Chili Peppers2013", t);
   Imprime(arvore, 0);
+  printf("\n");
   retira(arvore, "Red Hot Chili Peppers2006", t);
   Imprime(arvore, 0);
+  printf("\n");
   retira(arvore, "Red Hot Chili Peppers2016", t);
   Imprime(arvore, 0);
 
