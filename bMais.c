@@ -55,14 +55,14 @@ void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
     for(i=0; i<=a->nchaves-1; i++){
       ImprimeInfos(a->filho[i],andar+1);
       for(j=0; j<=andar; j++) printf("   ");
-      if(a->folha){
+      //if(a->folha){
         printf("Chave: %s\n", a->chave[i]);
         printf("Cantor: %s\n", a->adic[i]->cantor);
         printf("Ano: %d\n", a->adic[i]->ano);
         printf("No Musicas: %d\n", a->adic[i]->nMusicas);
         printf("Minutos: %d\n", a->adic[i]->minutos);
         printf("Album: %s\n", a->adic[i]->nmAlbum);
-      }
+      //}
     }
     ImprimeInfos(a->filho[i],andar+1);
   }
@@ -89,14 +89,6 @@ Info *BuscaInfos(char *chave, TAB *arv){
   int i=0;
   while(i < arv->nchaves && strcasecmp(arv->chave[i], chave)<0) i++;
   return no->adic[i];
-  //if(!arv) return NULL;
-  //int i = 0;
-  //while(i < arv->nchaves && strcasecmp(arv->chave[i],chave)<0) i++;
-  //if((i < arv->nchaves) && strcasecmp(ch == arv->chave[i]==0)){
-  //  if(arv->folha) return arv->infos[i]; //ponteiro para as infos
-  //  return BuscaInfos(arv->filho[i+1], ch);
-  //}
-  //return BuscaInfos(arv->filho[i], ch);
 }
 
 void AlteraUmaInfo(char *chave, TAB *arv){
@@ -200,13 +192,7 @@ void testeFolhas(TAB *t){
 TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
   int i = arv->nchaves-1;
   if(arv->folha){
-    /*
-    0: conteúdo das strings são iguais
-
-    < 0: conteúdo da string1 é menor do que string2
-
-    > 0: conteúdo da string1 é maior do que string2
-    */
+    
     while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) { //se chave for menor que o conteudo de no atual
       strcpy(arv->chave[i+1], arv->chave[i]);
       arv->adic[i+1] = arv->adic[i];
@@ -266,6 +252,51 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
   T = Insere_Nao_Completo(T,chave, adic, t);
 
   return T;
+}
+
+
+void BuscaObras(TAB* a, char *cantor){
+  if(!a) return;
+  if(a->folha){
+    int i;
+    int acabou = 0;
+    while(!acabou){
+      for(i=0; i<(a->nchaves); i++){
+        if(strcmp(a->adic[i]->cantor, cantor)==0){
+          printf("%s\n", a->adic[i]->nmAlbum);
+        }
+      }
+      if(a->prox == NULL){
+        acabou = 1;
+      }
+      else{
+        a = a->prox;
+      }
+    }
+    
+  }
+  while(a->filho[0]){
+    BuscaObras(a->filho[0], cantor);
+  }
+}
+
+
+TAB *RemoveInfosIntermediarias(TAB *arv){
+  if (!arv) return arv;
+  else if(arv->folha) return arv;
+  int i;
+  printf("removendo de %s\n",arv->chave);
+  for (i=0; i<(arv->nchaves)-1;i++) {
+    arv->filho[i] = RemoveInfosIntermediarias(arv->filho[i]);
+  }
+  //printf("====================================\n");
+  //printf("Ano antes %d\n", arv->adic->ano);
+  for (i=0; i<(arv->nchaves)-1;i++) {
+    arv->adic[i]->ano = -1;
+  }
+
+  return arv;
+  //printf("Ano depois %d\n", arv->adic->ano);
 }
 
 /*

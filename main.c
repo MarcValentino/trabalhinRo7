@@ -8,8 +8,11 @@ int main(int argc, char *argv[]){
   printf("Digite o nome do arquivo: ");
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
-
+  //AlteraUmaInfo("Marisa Monte1991", arvore);
   ImprimeInfos(arvore, 0);
+  //arvore = RemoveInfosIntermediarias(arvore);
+  printf("\n\n\n\n\n\n");
+  BuscaObras(arvore, "Mariana Ferreira");
   //Imprime(arvore, 0);
   /*
   int num = 0, from, to;

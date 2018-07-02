@@ -43,3 +43,5 @@ void ImprimeInfos(TAB *a, int andar);
 
 //funcoes do arquivo.c
 TAB *leLinhas(TAB *arv, char *nome);
+TAB *RemoveInfosIntermediarias(TAB *arv);
+void BuscaObras(TAB* a, char *cantor);
