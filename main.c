@@ -9,6 +9,10 @@ int main(int argc, char *argv[]){
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
 
+  //printf("imprime infos:\n");
+  //ImprimeInfos(arvore, 0);
+
+
   Imprime(arvore, 0);
   printf("\n");
   retira(arvore, "Marcelo Valentino3000", t);
