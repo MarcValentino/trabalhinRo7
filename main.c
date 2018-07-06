@@ -8,14 +8,15 @@ int main(int argc, char *argv[]){
   printf("Digite o nome do arquivo: ");
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
+  //printf("%s\n", cara->cantor);
 
   //printf("imprime infos:\n");
   //ImprimeInfos(arvore, 0);
 
 
-  Imprime(arvore, 0);
+  //Imprime(arvore, 0);
   printf("\n");
-  retira(arvore, "Marcelo Valentino3000", t);
+  /*retira(arvore, "Marcelo Valentino3000", t);
   Imprime(arvore, 0);
   printf("\n");
   retira(arvore, "Paulinho da Viola1968", t);
@@ -32,7 +33,7 @@ int main(int argc, char *argv[]){
   printf("\n");
   retira(arvore, "Red Hot Chili Peppers2016", t);
   Imprime(arvore, 0);
-
+*/
   /*
   int num = 0, from, to;
   while(num != -1){
@@ -60,5 +61,5 @@ int main(int argc, char *argv[]){
     printf("\n\n");
   }
   */
-
+  return 0;
 }

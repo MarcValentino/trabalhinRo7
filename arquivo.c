@@ -3,14 +3,15 @@
 #include <string.h>
 #include "bMais.h"
 
-TAB* leLinhas(TAB *arv, char *nome){
+TAB *leLinhas(TAB *arv, char *nome){
   FILE *arq;
   arq = fopen(nome, "r");
   int t = 2;
   char linha[256], *token;
+  int i = 0;
   while (fgets(linha, sizeof(linha), arq)){
         Info *infos = (Info *) malloc(sizeof(Info));
-
+        if(linha[1]=='\0') break; //teste pra ver se a string é vazia
         token = strtok(linha, "/");
 
         //while(token){
@@ -45,6 +46,9 @@ TAB* leLinhas(TAB *arv, char *nome){
                 printf("minutos: %d\n", infos->minutos);
                 printf("nmAlbum: %s\n", infos->nmAlbum);
 */      arv = Insere(arv, chave, infos, t);
+        Imprime(arv, 0);
+        i++;
+        printf("\n");
 
       }
       return arv;

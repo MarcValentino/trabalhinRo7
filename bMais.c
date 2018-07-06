@@ -241,7 +241,6 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     return S;
   }
   T = Insere_Nao_Completo(T,chave, adic, t);
-
   return T;
 }
 
