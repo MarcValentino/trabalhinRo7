@@ -46,10 +46,10 @@ TAB *leLinhas(TAB *arv, char *nome){
                 printf("minutos: %d\n", infos->minutos);
                 printf("nmAlbum: %s\n", infos->nmAlbum);
 */      arv = Insere(arv, chave, infos, t);
-        Imprime(arv, 0);
         i++;
         printf("\n");
 
       }
+      Imprime(arv, 0);
       return arv;
   }

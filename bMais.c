@@ -82,9 +82,13 @@ TAB *Busca(TAB* arv, char *ch){
 
 Info *BuscaInfos(char *chave, TAB *arv){
   TAB *no = Busca(arv, chave);
-  if(!no) return NULL;
+  if(!no){
+    printf("n achou\n");
+    return NULL;
+  }
   int i=0;
   while(i < arv->nchaves && strcasecmp(arv->chave[i], chave)<0) i++;
+  printf("%s\n%d\n%d\n%d\n%s\n", no->adic[i]->cantor, no->adic[i]->ano, no->adic[i]->nMusicas, no->adic[i]->minutos, no->adic[i]->nmAlbum);
   return no->adic[i];
 }
 
@@ -101,7 +105,8 @@ void AlteraUmaInfo(char *chave, TAB *arv){
   scanf("%d", &infos->minutos);
   printf("Nome do Album: ");
   char novoNm[100];
-  scanf("%s", novoNm);
+  fgets(novoNm, sizeof(novoNm), stdin);
+  fgets(novoNm, sizeof(novoNm), stdin);
   strcpy(infos->nmAlbum, novoNm);
 }
 
@@ -305,7 +310,10 @@ TAB* remover(TAB* arv, char *ch, int t){
     if(arv->folha){ //CASO 1
       printf("\nCASO 1\n");
       int j;
-      for(j=i; j<arv->nchaves-1;j++) strcpy(arv->chave[j], arv->chave[j+1]);
+      for(j=i; j<arv->nchaves-1;j++){
+        strcpy(arv->chave[j], arv->chave[j+1]);
+        arv->adic[j] = arv->adic[j+1];
+      }
       arv->nchaves--;
       return arv;
     }
@@ -324,9 +332,11 @@ TAB* remover(TAB* arv, char *ch, int t){
           //z->chave[j] = z->chave[j+1];
         //z->chave[j] = 0; Rosseti
         strcpy(y->chave[y->nchaves], z->chave[0]); //pega a primeira chave do irmao da direita
+        y->adic[y->nchaves] = z->adic[0];
         y->nchaves++;
         for(j=0; j < z->nchaves; j++)       //ajustar filhos de z
           strcpy(z->chave[j], z->chave[j+1]);
+          z->adic[j] = z->adic[j+1];
         z->nchaves--;
         strcpy(arv->chave[i], z->chave[0]); //dar a arv uma chave de z
         arv->filho[i] = remover(arv->filho[i], ch, t);
@@ -338,6 +348,7 @@ TAB* remover(TAB* arv, char *ch, int t){
         int j;
         for(j = y->nchaves; j>0; j--)               //encaixar lugar da nova chave
           strcpy(y->chave[j], y->chave[j-1]);
+          y->adic[j] = y->adic[j-1];
         //for(j = y->nchaves+1; j>0; j--)             //enca(ixar lugar dos filhos da nova chave
           //y->filho[j] = y->filho[j-1];
         //y->chave[0] = arv->chave[i-1];              //dar a y a chave i da arv
@@ -370,6 +381,7 @@ TAB* remover(TAB* arv, char *ch, int t){
         }else{
           for(j=0; j < t-1; j++){
             strcpy(y->chave[t-1+j], z->chave[j]);     //passar filho[i+1] para filho[i]
+            y->adic[t-1+j] = z->adic[j];
             y->nchaves++;
           }
           arv->filho[i+1] = y;
@@ -389,15 +401,18 @@ TAB* remover(TAB* arv, char *ch, int t){
         if(y->folha){
           z = arv->filho[i-1];
           if(i == arv->nchaves){
-            z->chave[t-1] = arv->chave[i-1]; //pegar chave[i] e poe ao final de filho[i-1]
+            strcpy(z->chave[t-1], arv->chave[i-1]); //pegar chave[i] e poe ao final de filho[i-1]
           }
           else{
-            z->chave[t-1] = arv->chave[i];   //pegar chave [i] e poe ao final de filho[i-1]
+            strcpy(z->chave[t-1], arv->chave[i]);   //pegar chave [i] e poe ao final de filho[i-1]
           }
+
           z->nchaves++;
           int j;
           for(j=0; j < t-1; j++){
-            z->chave[t+j] = y->chave[j];     //passar filho[i+1] para filho[i]
+            strcpy(z->chave[t+j], y->chave[j]);
+                 //passar filho[i+1] para filho[i]
+            z->adic[t+j] = y->adic[j];
             z->nchaves++;
           }
           if(!z->folha){
@@ -406,11 +421,11 @@ TAB* remover(TAB* arv, char *ch, int t){
             }
           }
           arv->nchaves--;
-          arv->filho[i-1] = z;
+          arv->filho[arv->nchaves-1] = z;
           arv = remover(arv, ch, t);
           return arv;
         }
-        /*apenas B
+        /*
         z = arv->filho[i-1];
         if(i == arv->nchaves)
           strcpy(z->chave[t-1], arv->chave[i-1]); //pegar chave[i] e poe ao final de filho[i-1]
@@ -422,11 +437,11 @@ TAB* remover(TAB* arv, char *ch, int t){
           strcpy(z->chave[t+j], y->chave[j]);     //passar filho[i+1] para filho[i]
           z->nchaves++;
         }
-        if(!z->folha){
-          for(j=0; j<t; j++){
-            z->filho[t+j] = y->filho[j];
-          }
+
+        for(j=0; j<t; j++){
+          z->filho[t+j] = y->filho[j];
         }
+
         arv->nchaves--;
         arv->filho[i-1] = z;
         arv = remover(arv, ch, t);
