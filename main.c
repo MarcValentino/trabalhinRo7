@@ -8,6 +8,9 @@ int main(int argc, char *argv[]){
   printf("Digite o nome do arquivo: ");
   scanf("%s", nmArq);
   arvore = leLinhas(arvore, nmArq);
+  ImprimeInfos(arvore, 0);
+
+  //arvore = retira(arvore, "Red Hot Chili Peppers1999", t);
   //printf("%s\n", cara->cantor);
 
   //printf("imprime infos:\n");
