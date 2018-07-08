@@ -53,3 +53,15 @@ TAB *leLinhas(TAB *arv, char *nome){
       Imprime(arv, 0);
       return arv;
   }
+
+  printf("\n");
+  printf("#################\n");
+  printf("Número de Chaves: %d\n",arv->nchaves);
+  printf("\n");
+  printf("Árvore: \n");
+  Imprime(arv,0);
+  printf("#################\n");
+  printf("\n");
+
+  return arv;
+}
