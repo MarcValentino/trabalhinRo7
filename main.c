@@ -12,7 +12,7 @@ int main(){
   char chave[200];
   char ano[5];
   while(opt != -5){
-    printf("-9 para remover, 0 para debug, -1 para imprimir infos, -2 para buscar/-3 para modificar uma info, -4 para imprimir todas as obras, -5 para sair para sair\n");
+    printf("-9 para remover, 0 para debug, -1 para imprimir infos, -2 para buscar/-3 para modificar uma info, -4 para imprimir todas as obras, -5 para sair\n");
     scanf("%d", &opt);
     fgets(chave, sizeof(chave), stdin);
     if(!opt) Imprime(arvore, 0);
@@ -55,7 +55,17 @@ int main(){
       strcat(chave, ano);
       AlteraUmaInfo(chave, arvore);
     }
-
+    else if(opt==-4){
+      printf("Cantor:\n");
+      fgets(chave, sizeof(chave), stdin);
+      char *pos;
+      if((pos=strchr(chave, '\n')) != NULL) *pos = '\0';
+      char busca[200];
+      strcpy(busca, chave);
+      strcat(busca, "0000");
+      TAB *p = arvore;
+      BuscaObras(p, chave, busca);
+    }
   }
   return 0;
 }

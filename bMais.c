@@ -249,29 +249,32 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
   T = Insere_Nao_Completo(T,chave, adic, t);
   return T;
 }
+void ConsertaFinal(TAB *arv){
+  while(!arv->folha) arv = arv->filho[arv->nchaves];
+  arv->prox = NULL;
+}
 
-void BuscaObras(TAB* a, char *cantor){
-  if(!a) return;
-  if(a->folha){
-    int i;
-    int acabou = 0;
-    while(!acabou){
-      for(i=0; i<(a->nchaves); i++){
-        if(strcmp(a->adic[i]->cantor, cantor)==0){
-          printf("%s\n", a->adic[i]->nmAlbum);
-        }
-      }
-      if(a->prox == NULL){
-        acabou = 1;
-      }
-      else{
-        a = a->prox;
-      }
-    }
-
+void BuscaObras(TAB* a, char *cantor, char *chave){
+  int i;
+  while(!a->folha){
+    for(i=0;i < a->nchaves && strcasecmp(a->chave[i], chave)<0;i++);
+    a = a->filho[i];
   }
-  while(a->filho[0]){
-    BuscaObras(a->filho[0], cantor);
+  int j=0;
+  while(strcasecmp(a->adic[j]->cantor, cantor)<0){
+    j++;
+    if(j==a->nchaves){
+      j = 0;
+      a = a->prox;
+    }
+  }
+  while(j<a->nchaves && !strcasecmp(a->adic[j]->cantor, cantor) && a){
+    printf("%s\n%d\n%d\n%d\n%s\n", a->adic[j]->cantor, a->adic[j]->ano, a->adic[j]->nMusicas, a->adic[j]->minutos, a->adic[j]->nmAlbum);
+    j++;
+    if(j==a->nchaves && a->prox){
+      a = a->prox;
+      j = 0;
+    }
   }
 }
 

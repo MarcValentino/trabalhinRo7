@@ -50,6 +50,8 @@ TAB *leLinhas(TAB *arv, char *nome){
         printf("\n");
 
       }
+      TAB *p = arv;
+      ConsertaFinal(p);
       Imprime(arv, 0);
       return arv;
   }
