@@ -6,12 +6,11 @@
 TAB *Cria(int t){
   TAB* novo = (TAB*)malloc(sizeof(TAB));
   novo->nchaves = 0;
-  novo->chave =(char**)malloc(((t*2)-1)*sizeof(char*)); //mudei de sizeof(char**) para sizeof(char*)
+  novo->chave =(char**)malloc(((t*2)-1)*sizeof(char*));
   int i;
   for(i=0;i<t*2-1;i++) novo->chave[i] = (char *) malloc((64)*sizeof(char));
   novo->folha=1;
   novo->filho = (TAB**)malloc(sizeof(TAB*)*(t*2));
-  //int i;
   for(i=0; i<(t*2); i++) novo->filho[i] = NULL;
   novo->prox = NULL;
   novo->adic = (Info**)malloc(sizeof(Info*)*((2*t)-1));
@@ -47,7 +46,7 @@ void Imprime(TAB *a, int andar){
   }
 }
 
-void ImprimeInfos(TAB *a, int andar){ //so imprime se for folha
+void ImprimeInfos(TAB *a, int andar){
   if(a){
     int i,j;
     for(i=0; i<=a->nchaves-1; i++){
@@ -82,13 +81,10 @@ TAB *Busca(TAB* arv, char *ch){
 
 Info *BuscaInfos(char *chave, TAB *arv){
   TAB *no = Busca(arv, chave);
-  if(!no){
-    printf("n achou\n");
-    return NULL;
-  }
+  if(!no) return NULL;
   int i=0;
-  while(i < arv->nchaves && strcasecmp(arv->chave[i], chave)<0) i++;
-  printf("%s\n%d\n%d\n%d\n%s\n", no->adic[i]->cantor, no->adic[i]->ano, no->adic[i]->nMusicas, no->adic[i]->minutos, no->adic[i]->nmAlbum);
+  while(i < no->nchaves && strcasecmp(no->chave[i], chave)<0) i++;
+  printf("%s\nAno: %d\nMusicas: %d\nDuração: %d\nAlbum: %s\n", no->adic[i]->cantor, no->adic[i]->ano, no->adic[i]->nMusicas, no->adic[i]->minutos, no->adic[i]->nmAlbum);
   return no->adic[i];
 }
 
@@ -125,24 +121,18 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
     int j;
     for(j=0;j<t;j++) {
       strcpy(z->chave[j], y->chave[j+t-1]); //z vai ser o filho da direita
-      //printf("===== ANO %d\n", z->adic[j]->ano );
       z->adic[j] = y->adic[j+t-1];
-      //printf("===== ANO %d\n", z->adic[j]->ano );
 
     }
     y->nchaves = t - 1;
-    for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j]; //só entra nesse for quando tem pai
+    for(j=x->nchaves; j>=i; j--) x->filho[j+1] = x->filho[j];
     x->filho[i] = z;
     for(j=x->nchaves; j>=i; j--){
-      strcpy(x->chave[j], x->chave[j-1]); //só entra nesse for quando tem pai
+      strcpy(x->chave[j], x->chave[j-1]);
       x->adic[j] = x->adic[j-1];
     }
     strcpy(x->chave[i-1], y->chave[t-1]);
-    //printf("===== ANO %d\n", x->adic[j]->ano );
-
     x->adic[i-1] = y->adic[t-1];
-    //printf("===== ANO %d\n", x->adic[j]->ano );
-
     x->nchaves++;
     if((y->folha)&&(z->folha)) y->prox = z;
     if(proxOrig) z->prox = proxOrig;
@@ -153,12 +143,6 @@ TAB *Divisao(TAB *x, int i, TAB* y, int t){ //o i é a posição que vai entrar 
   int j;
   for(j=0;j<t-1;j++){
     strcpy(z->chave[j], y->chave[j+t]);
-    //printf("===== ANO %d\n", z->adic[j]->ano );
-
-    //z->adic[j] = y->adic[j+t];
-
-    //printf("===== ANO %d\n", z->adic[j]->ano );
-
   }
   if(!y->folha){
     for(j=0;j<t;j++){
@@ -185,7 +169,6 @@ void testeFolhas(TAB *t){
   while(p!=NULL){
     if(p->folha) printf("eh folha\n");
     int i;
-    //for(i=0;i<p->nchaves;i++) printf("%s\n", p->chave[i]);
     p = p->prox;
   }
 }
@@ -203,12 +186,12 @@ TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
     arv->adic[i+1] = adic;
     arv->nchaves++;
     return arv;
-  }//VAI SER O CASO MAIS IMPORTANTE - SÓ INSERE EM FOLHA (B+)
-  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--; //se chave for menor que o conteudo de no atual
+  }
+  while((i>=0) && (strcmp(chave, arv->chave[i]) < 0)) i--;
   i++;
   if(arv->filho[i]->nchaves == ((2*t)-1)){
-    arv = Divisao(arv, (i+1), arv->filho[i], t); //o que é i+1??? na outra era 1 só
-    if(strcmp(chave, arv->chave[i]) > 0) i++; //se chave for maior que o conteudo de no atual
+    arv = Divisao(arv, (i+1), arv->filho[i], t);
+    if(strcmp(chave, arv->chave[i]) > 0) i++;
   }
   arv->filho[i] = Insere_Nao_Completo(arv->filho[i], chave, adic, t);
   return arv;
@@ -217,12 +200,9 @@ TAB *Insere_Nao_Completo(TAB *arv, char *chave, Info *adic, int t){
 
 TAB *Insere(TAB *T, char *chave, Info *adic, int t){
   if(Busca(T,chave)){
-    //printf("achou %s na busca\n", chave);
     return T;
-  }  //modificar a funcao busca p/ char
+  }
   if(!T){
-    //printf("arvore vazia\n");
-    //printf("inserir %d no cantor\n", adic->ano);
     T=Cria(t);
     strcpy(T->chave[0], chave);
     T->adic[0]->ano = adic->ano;
@@ -231,31 +211,30 @@ TAB *Insere(TAB *T, char *chave, Info *adic, int t){
     strcpy(T->adic[0]->cantor, adic->cantor);
     strcpy(T->adic[0]->nmAlbum,adic->nmAlbum);
 
-    //FALTA CANTOR E NM DO ALBUM
-
     T->nchaves=1;
     return T;
   }
   if(T->nchaves == (2*t)-1){
-    printf("Nó cheio, tem que dividir\n");
     TAB *S = Cria(t);
     S->nchaves=0;
     S->folha = 0;
     S->filho[0] = T;
-    S = Divisao(S,1,T,t); //acho que o 1 devia ser a metade de (2*t)-1 ???
+    S = Divisao(S,1,T,t);
     S = Insere_Nao_Completo(S,chave, adic, t);
     return S;
   }
   T = Insere_Nao_Completo(T,chave, adic, t);
   return T;
 }
+
 void ConsertaFinal(TAB *arv){
   while(!arv->folha) arv = arv->filho[arv->nchaves];
   arv->prox = NULL;
 }
 
-void BuscaObras(TAB* a, char *cantor, char *chave){
+Lista *BuscaObras(TAB* a, char *cantor, char *chave){
   int i;
+  Lista *l = iniLista(l);
   while(!a->folha){
     for(i=0;i < a->nchaves && strcasecmp(a->chave[i], chave)<0;i++);
     a = a->filho[i];
@@ -269,6 +248,7 @@ void BuscaObras(TAB* a, char *cantor, char *chave){
     }
   }
   while(j<a->nchaves && !strcasecmp(a->adic[j]->cantor, cantor) && a){
+    l = insereLista(l, a->chave[j]);
     printf("%s\n%d\n%d\n%d\n%s\n", a->adic[j]->cantor, a->adic[j]->ano, a->adic[j]->nMusicas, a->adic[j]->minutos, a->adic[j]->nmAlbum);
     j++;
     if(j==a->nchaves && a->prox){
@@ -276,6 +256,7 @@ void BuscaObras(TAB* a, char *cantor, char *chave){
       j = 0;
     }
   }
+  return l;
 }
 
 
@@ -283,35 +264,28 @@ TAB *RemoveInfosIntermediarias(TAB *arv){
   if (!arv) return arv;
   else if(arv->folha) return arv;
   int i;
-  //printf("removendo de %s\n",arv->chave[i]);
   for (i=0; i<(arv->nchaves)-1;i++) {
     arv->filho[i] = RemoveInfosIntermediarias(arv->filho[i]);
   }
-  //printf("====================================\n");
-  //printf("Ano antes %d\n", arv->adic->ano);
   for (i=0; i<(arv->nchaves)-1;i++) {
     arv->adic[i]->ano = -1;
   }
 
   return arv;
-  //printf("Ano depois %d\n", arv->adic->ano);
 }
+
 TAB* remover(TAB* arv, char *ch, int t){
   if(!arv){
-    printf("nao tem nada\n");
+    //printf("nao tem nada\n");
     return arv;
-  }//suave
+  }
 
   int i, trocou = 0;
-  printf("Removendo %s...\n", ch);
+  //printf("Removendo %s...\n", ch);
   for(i = 0; i<arv->nchaves &&  strcasecmp(arv->chave[i], ch) < 0; i++);
-    if(strcasecmp(arv->chave[i] , ch) == 0 && !arv->folha){
-      i++;
-      trocou = 1;
-    }
-  if(i < arv->nchaves && strcasecmp(arv->chave[i], ch )== 0){ //CASOS 1
+  if(i < arv->nchaves && strcasecmp(arv->chave[i], ch )== 0){ //CASO 1
     if(arv->folha){ //CASO 1
-      printf("\nCASO 1\n");
+      //printf("\nCASO 1\n");
       int j;
       for(j=i; j<arv->nchaves-1;j++){
         strcpy(arv->chave[j], arv->chave[j+1]);
@@ -320,53 +294,65 @@ TAB* remover(TAB* arv, char *ch, int t){
       arv->nchaves--;
       return arv;
     }
-    //Não haverá remoção em nós intermediários
+    i++;
   }
 
   TAB *y = arv->filho[i], *z = NULL;
   if (y->nchaves == t-1){ //CASOS 3A e 3B
-    if(y->folha){
-      if((i < arv->nchaves) && (arv->filho[i+1]->nchaves >=t)){ //CASO 3A
-        printf("\nCASO 3A: i menor que nchaves\n");
-        z = arv->filho[i+1];
-        //y->chave[t-1] = arv->chave[i];   //só para b: dar a y a chave i da arv
-        int j;
-        //for(j=0; j < z->nchaves-1; j++)  //ajustar chaves de z
-          //z->chave[j] = z->chave[j+1];
-        //z->chave[j] = 0; Rosseti
-        strcpy(y->chave[y->nchaves], z->chave[0]); //pega a primeira chave do irmao da direita
-        y->adic[y->nchaves] = z->adic[0];
-        y->nchaves++;
-        for(j=0; j < z->nchaves; j++)       //ajustar filhos de z
-          strcpy(z->chave[j], z->chave[j+1]);
-          z->adic[j] = z->adic[j+1];
-        z->nchaves--;
-        strcpy(arv->chave[i], z->chave[0]); //dar a arv uma chave de z
-        arv->filho[i] = remover(arv->filho[i], ch, t);
-        return arv;
+    if((i < arv->nchaves) && (arv->filho[i+1]->nchaves >=t)){ //CASO 3A
+      //printf("\nCASO 3A: i menor que nchaves\n");
+      z = arv->filho[i+1];
+      if(!y->folha){
+        strcpy(y->chave[t-1], arv->chave[i]);
+        strcpy(arv->chave[i], z->chave[0]);
       }
-      if((i > 0) && (!z) && (arv->filho[i-1]->nchaves >=t)){ //CASO 3A
-        printf("\nCASO 3A: i igual a nchaves\n");  //remover a chave do ultimo filho
-        z = arv->filho[i-1];
-        int j;
-        for(j = y->nchaves; j>0; j--)               //encaixar lugar da nova chave
-          strcpy(y->chave[j], y->chave[j-1]);
-          y->adic[j] = y->adic[j-1];
-        //for(j = y->nchaves+1; j>0; j--)             //enca(ixar lugar dos filhos da nova chave
-          //y->filho[j] = y->filho[j-1];
-        //y->chave[0] = arv->chave[i-1];              //dar a y a chave i da arv
-        y->nchaves++;
-        strcpy(arv->chave[i-1], z->chave[z->nchaves-1]);   //dar a arv uma chave de z
-        strcpy(y->chave[0], z->chave[z->nchaves-1]);         //enviar ponteiro de z para o novo elemento em y
-        z->nchaves--;
-        arv->filho[i] = remover(y, ch, t);
-        return arv;
+      else{
+        strcpy(y->chave[t-1], z->chave[0]);
+        y->adic[t-1] = z->adic[0];
+        strcpy(arv->chave[i], z->chave[1]);
       }
+      int j;
+      y->nchaves++;
+      for(j=0; j < z->nchaves-1; j++){       //ajustar filhos de z
+        strcpy(z->chave[j], z->chave[j+1]);
+        if(z->folha) z->adic[j] = z->adic[j+1];
+      }
+      y->filho[y->nchaves] = z->filho[0];
+      for(j=0;j<z->nchaves;j++) z->filho[j] = z->filho[j+1];
+      z->nchaves--;
+      arv->filho[i] = remover(arv->filho[i], ch, t);
+      return arv;
     }
+    if((i > 0) && (!z) && (arv->filho[i-1]->nchaves >=t)){ //CASO 3A
+      //printf("\nCASO 3A: i igual a nchaves\n");  //remover a chave do ultimo filho
+      z = arv->filho[i-1];
+      int j;
+      for(j = y->nchaves; j>0; j--){               //encaixar lugar da nova chave
+        strcpy(y->chave[j], y->chave[j-1]);
+        if(y->folha)y->adic[j] = y->adic[j-1];
+      }
+      for(j = y->nchaves+1; j>0; j--) y->filho[j] = y->filho[j-1];
+      if(!y->folha){
+				strcpy(y->chave[0], arv->chave[i-1]);
+				strcpy(arv->chave[i-1], z->chave[z->nchaves-1]);
+				y->filho[0] = z->filho[z->nchaves];
+			}
+			else{
+				strcpy(y->chave[0], z->chave[z->nchaves-1]);
+				y->adic[0] = z->adic[z->nchaves-1];
+        strcpy(arv->chave[i-1], z->chave[z->nchaves-1]);
+      }
 
-    if(!z){ //CASO 3B - QUEBRADO-TEM QUE CONSERTAR(Funcionando só para o caso i=0)
+      y->nchaves++;
+      z->nchaves--;
+      arv->filho[i] = remover(y, ch, t);
+      return arv;
+    }
+    //}
+
+    if(!z){
       if(i < arv->nchaves && arv->filho[i+1]->nchaves == t-1){
-        printf("\nCASO 3B: i menor que nchaves\n");
+        //printf("\nCASO 3B: i menor que nchaves\n");
         z = arv->filho[i+1];
         int j;
         if(!y->folha){
@@ -383,14 +369,15 @@ TAB* remover(TAB* arv, char *ch, int t){
 
         }else{
           for(j=0; j < t-1; j++){
-            strcpy(y->chave[t-1+j], z->chave[j]);     //passar filho[i+1] para filho[i]
+            strcpy(y->chave[t-1+j], z->chave[j]);
             y->adic[t-1+j] = z->adic[j];
             y->nchaves++;
           }
+          y->prox = z->prox;
           arv->filho[i+1] = y;
 
         }
-        for(j=i; j < arv->nchaves-1; j++){ //limpar referências de i
+        for(j=i; j < arv->nchaves-1; j++){
           strcpy(arv->chave[j], arv->chave[j+1]);
           arv->filho[j+1] = arv->filho[j+2];
         }
@@ -399,60 +386,42 @@ TAB* remover(TAB* arv, char *ch, int t){
         return arv;
       }
 
-      if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){ //aqui da ruim
-        printf("\nCASO 3B: i igual a nchaves\n");
-        if(y->folha){
-          z = arv->filho[i-1];
+      if((i > 0) && (arv->filho[i-1]->nchaves == t-1)){
+        //printf("\nCASO 3B: i igual a nchaves\n");
+        z = arv->filho[i-1];
+        if(!z->folha){
           if(i == arv->nchaves){
             strcpy(z->chave[t-1], arv->chave[i-1]); //pegar chave[i] e poe ao final de filho[i-1]
           }
           else{
             strcpy(z->chave[t-1], arv->chave[i]);   //pegar chave [i] e poe ao final de filho[i-1]
           }
-
           z->nchaves++;
-          int j;
-          for(j=0; j < t-1; j++){
-            strcpy(z->chave[t+j], y->chave[j]);
-                 //passar filho[i+1] para filho[i]
-            z->adic[t+j] = y->adic[j];
-            z->nchaves++;
-          }
-          if(!z->folha){
-            for(j=0; j<t; j++){
-              z->filho[t+j] = y->filho[j];
-            }
-          }
-          arv->nchaves--;
-          arv->filho[arv->nchaves-1] = z;
-          arv = remover(arv, ch, t);
-          return arv;
         }
-        /*
-        z = arv->filho[i-1];
-        if(i == arv->nchaves)
-          strcpy(z->chave[t-1], arv->chave[i-1]); //pegar chave[i] e poe ao final de filho[i-1]
-        else
-          strcpy(z->chave[t-1], arv->chave[i]);   //pegar chave [i] e poe ao final de filho[i-1]
-        z->nchaves++;
+
+        int nchAtual = z->nchaves;
         int j;
         for(j=0; j < t-1; j++){
-          strcpy(z->chave[t+j], y->chave[j]);     //passar filho[i+1] para filho[i]
+          strcpy(z->chave[j+nchAtual], y->chave[j]);//passar filho[i+1] para filho[i]
+          if(z->folha) z->adic[j+nchAtual] = y->adic[j];
           z->nchaves++;
         }
-
-        for(j=0; j<t; j++){
-          z->filho[t+j] = y->filho[j];
+        if(!z->folha){
+          for(j=0;j<t; j++){
+            z->filho[t+j] = y->filho[j];
+          }
         }
-
+        else{
+          z->prox = y->prox;
+        }
         arv->nchaves--;
         arv->filho[i-1] = z;
         arv = remover(arv, ch, t);
         return arv;
-        */
       }
 
     }
+
   }
   arv->filho[i] = remover(arv->filho[i], ch, t);
   return arv;
@@ -462,4 +431,44 @@ TAB* remover(TAB* arv, char *ch, int t){
 TAB* retira(TAB* arv, char *chave, int t){
   if(!arv || !Busca(arv, chave)) return arv;
   return remover(arv, chave, t);
+}
+
+Lista *iniLista(Lista *l){
+  return NULL;
+}
+
+Lista *insereLista(Lista *l, char *chave){
+  if(!l){
+    Lista *temp = (Lista *) malloc(sizeof(Lista));
+    strcpy(temp->chave, chave);
+    temp->prox = NULL;
+    l = temp;
+    return l;
+  }
+  Lista *p = l;
+  while(p->prox) p = p->prox;
+  Lista *temp = (Lista *) malloc(sizeof(Lista));
+  strcpy(temp->chave, chave);
+  temp->prox = NULL;
+  p->prox = temp;
+  return l;
+}
+
+Lista *apagarLista(Lista *l, TAB *arv, int t){
+    Lista *temp = NULL;
+    while(l){
+      arv = retira(arv, l->chave, t);
+      temp = l;
+      l = l->prox;
+      free(temp);
+    }
+    return l;
+}
+
+void imprimeLista(Lista *l){
+  Lista *p = l;
+  while(p){
+    printf("%s\n", p->chave);
+    p = p->prox;
+  }
 }

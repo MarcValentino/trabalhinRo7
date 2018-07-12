@@ -18,13 +18,11 @@ typedef struct ArvB{
   struct ArvB **filho, *prox;
 }TAB;
 
-/* como era com inteiro antes
-typedef struct ArvB{ com inteiro
-  int nchaves, folha;
-  int *chave;
-  struct ArvB **filho, *prox;
-}TAB;
-*/
+typedef struct lista{
+  char chave[100];
+  struct lista *prox;
+}Lista;
+
 
 TAB *Cria(int t);
 TAB *Libera(TAB *a);
@@ -44,4 +42,8 @@ void ConsertaFinal(TAB *arv);
 //funcoes do arquivo.c
 TAB *leLinhas(TAB *arv, char *nome);
 TAB *RemoveInfosIntermediarias(TAB *arv);
-void BuscaObras(TAB* a, char *cantor, char *chave);
+Lista *BuscaObras(TAB* a, char *cantor, char *chave);
+Lista *iniLista(Lista *l);
+Lista *insereLista(Lista *l, char *chave);
+Lista *apagarLista(Lista *l, TAB *arv, int t);
+void imprimeLista(Lista *l);

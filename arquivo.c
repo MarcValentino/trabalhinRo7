@@ -6,6 +6,7 @@
 TAB *leLinhas(TAB *arv, char *nome){
   FILE *arq;
   arq = fopen(nome, "r");
+  if(!arq) return NULL;
   int t = 2;
   char linha[256], *token;
   int i = 0;
@@ -13,45 +14,26 @@ TAB *leLinhas(TAB *arv, char *nome){
         Info *infos = (Info *) malloc(sizeof(Info));
         if(linha[1]=='\0') break; //teste pra ver se a string é vazia
         token = strtok(linha, "/");
-
-        //while(token){
-        //  printf("%s\n", token);
-        //  token = strtok(NULL, "/");
-        //}
         strcpy(infos->cantor, token);
         token = strtok(NULL, "/");
         char chave[200];
         strcpy(chave, infos->cantor);
-        //printf("%s\n", chave);
         strcat(chave, token);
-        //printf("%s\n", chave);
-
-        //printf("%s\n", chave);
-
         infos->ano = atoi(token);
-        //printf("%d\n", ano);
         token = strtok(NULL, "/");
         infos->nMusicas = atoi(token);
-        //printf("%d\n", infos->nMusicas);
         token = strtok(NULL, "/");
         infos->minutos = atoi(token);
         token = strtok(NULL, "/");
         strcpy(infos->nmAlbum, token);
-/*
-
-                printf("INFORMACOES DO TOKEN:\n");
-                printf("CANTOR: %s\n", infos->cantor);
-                printf("ano: %d\n", infos->ano);
-                printf("nMusicas: %d\n", infos->nMusicas);
-                printf("minutos: %d\n", infos->minutos);
-                printf("nmAlbum: %s\n", infos->nmAlbum);
-*/      arv = Insere(arv, chave, infos, t);
+        arv = Insere(arv, chave, infos, t);
         i++;
-        printf("\n");
 
       }
       TAB *p = arv;
       ConsertaFinal(p);
+      printf("\n");
       Imprime(arv, 0);
+      printf("\n");
       return arv;
   }
